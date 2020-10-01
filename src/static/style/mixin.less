@@ -1,0 +1,6 @@
+@dpi:2;                         //默认设备像素比
+.function {                     //px转rem px转rpx设备适配函数,函数调用:width:px2rem(1)
+  .px2rem(@x) {
+    return: (@x*@dpi)*1rpx;
+  }
+}

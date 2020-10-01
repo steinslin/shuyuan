@@ -1,0 +1,159 @@
+<style lang="less">
+@import "../static/style/common.less";
+view{
+  line-height: initial;
+}
+.item {
+  box-sizing: border-box;
+  padding: 0 20rpx;
+  position: relative;
+  width: 660rpx;
+  height: 448rpx;
+  margin: 0 auto;
+  margin-top: 40rpx;
+  // border: 1px solid @orange-red;
+  border-radius: 18rpx;
+  background-image: linear-gradient(@orange-red 0, @orange-red 48rpx, #292C4B 48rpx, #292C4B);
+  text-align: center;
+  .tags {
+    margin: 16rpx 0 16rpx;
+    .tag {
+      border: 1px solid @yellow;
+      border-radius: 6rpx;
+      padding: 2rpx;
+      margin-right: 10rpx;
+      color: @yellow;
+      font-size: 20rpx;
+    }
+  }
+
+  .top-bar {
+    height: 48rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // background-color: @orange-red;
+  }
+
+  .poster {
+    position: absolute;
+    left: -20rpx;
+    top: 80rpx;
+    width: 220rpx;
+    height: 166rpx;
+    background-color: @orange-red;
+    border-radius: 18rpx;
+    z-index: 20;
+  }
+
+  .main {
+    width: 350rpx;
+    // border: 1px solid white;
+    margin: 34rpx 0 0 200rpx;
+    text-align: left;
+
+    .people,
+    .time {
+      color: rgba(255, 255, 255, 0.68)
+    }
+  }
+
+  .price {
+    text-align: right;
+  }
+
+  .line {
+    height: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.20)
+  }
+
+  .timing {
+    // border: 1px solid white;
+    text-align: left;
+    margin-top: 24rpx;
+  }
+
+  .btn {
+    position: absolute;
+    right: 30rpx;
+    bottom: 22rpx;
+    width: 160rpx;
+    height: 54rpx;
+    line-height: 54rpx;
+    background-color: #ef8226;
+    border-radius: 10rpx;
+  }
+}
+</style>
+
+<template>
+  <div class="item">
+    <div class="top-bar font-24 white">
+      <sapn>订单号：{{info.orderSn}}</sapn>
+      <span>待核销</span>
+      <!-- <sapn v-if="info.state===1">待使用</sapn>
+      <sapn v-if="info.state===2">已使用</sapn>
+      <sapn v-if="info.state===3">已失效</sapn> -->
+    </div>
+    <image class="poster" :src="info.ticketPic"/>
+    <div class="main">
+      <div class="title white font-32">
+        {{info.name}}
+      </div>
+      <div class="titleEng orange-red font-30 ">
+        {{info.nameEn}}
+      </div>
+      <div class="tags yellow font-20">
+        <span class="tag" v-for="(item,index) in info.tags" :key="index">{{item}}</span>
+      </div>
+      <div class="people font-24">
+        {{info.content}}
+      </div>
+      <div class="time font-24">
+        {{info.restrictContent}}
+      </div>
+    </div>
+    <div class="price font-36 orange-red">
+      ￥{{info.price}}
+    </div>
+    <div class="line"></div>
+    <div class="timing">
+      <div class="font-20 white">使用时间:</div>
+      <div class="font-20 orange-red">{{info.orderTime}}</div>
+    </div>
+    <!-- <button class="btn font-24 white" @tap="orderDetail(info.id)">
+      查看二维码
+    </button> -->
+  </div>
+</template>
+<script>
+import wepy from '@wepy/core';
+wepy.component({
+    data(){
+        return{
+
+        }
+    },
+    props:{
+        info:Object,
+        type:String,
+    },
+    methods:{
+        orderDetail(id){
+          // console.log(id)
+          wx.navigateTo({
+            url:"/pages/booking/information?id="+id
+          })
+        }
+    },
+    created(){
+        
+                            
+    },
+    // attached(){
+    //     this.info.tags = this.info.tags.split(",");
+    //     console.log(this.info)
+    // }
+})
+</script>
+

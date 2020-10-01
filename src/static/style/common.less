@@ -1,0 +1,150 @@
+@import url("./mixin.less");
+@orange-light:#f08327;
+@orange-heavy:#ea5717;
+@main-color1:#1c1d31;
+@main-color2:#a1a1a1;
+@main-color3:#fac037;
+@staticResFilePath:'http://llzx.slmimi.com:8686/profile/app/pm';
+// .page{
+//   padding-top: px2rem(80);
+//   padding-bottom: 48rpx;
+// }
+page{
+  
+}
+view{
+  word-break:break-all;
+}
+.ml-20{
+  margin-left: 20rpx;
+}
+.container{
+  margin:0 30rpx;
+  box-sizing: border-box;
+}
+.panel{
+  margin:0 15rpx 20rpx 15rpx;
+  background-color:#fff;
+  transform:translateX(0);
+  overflow: hidden;
+  &.fu-wd{
+    margin: 0 0 20rpx 0;
+  }
+}
+image{
+  display: block;
+}
+button {
+  font-size: 28rpx;
+  background-color: #fff;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+input {
+  outline: none;
+  border: none;
+  list-style: none;
+}
+
+button::after {
+  border: none;
+}
+
+.inbk{
+  display: inline-block;
+}
+.bk{
+  display:block;
+}
+.text-center{
+  text-align: center;
+}
+.panel{
+  background-color:#fff;
+  border:1px solid #f2f2f2;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.text-overflow{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.text-line(@line){
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: @line;
+  overflow: hidden;
+}
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix{
+    zoom: 1;
+}
+.fl{
+  float: left;
+}
+.fr{
+  float: right;
+}
+
+.t-idt{
+  text-indent:56rpx;
+}
+.pm-title{
+  position: relative;
+  font-size: px2rem(16);
+  color:#fff;
+  margin-top: px2rem(20);
+  margin-bottom: px2rem(20);
+  padding-left: px2rem(12);
+  &:before{
+    content:"";
+    position: absolute;
+    top:0;
+    left:0;
+    width:px2rem(3.5);
+    height:100%;
+    background-color:#EF8226;
+    border-radius: 4px;
+  }
+  .en{
+    color:#EF8226;
+    margin-left: px2rem(8);
+  }
+}
+.btn-fixed{
+  position: fixed;
+  left:px2rem(15);
+  bottom:px2rem(19);
+}
+.pm-btn{
+  width:px2rem(345);
+  height:px2rem(50);
+  line-height: px2rem(50);
+  text-align: center;
+  background-color:#EF8226;
+  border:1px solid #EF8226;
+  border-radius: 4px;
+}
+.pm-btn2{
+  width:px2rem(345);
+  height:px2rem(50);
+  color:#EF8226;
+  line-height: px2rem(50);
+  text-align: center;
+  border:1px solid #EF8226;
+  border-radius: 4px;
+}
