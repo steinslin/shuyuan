@@ -1,0 +1,166 @@
+<template>
+  <div class="page">
+    <div class="banner"></div>
+    <div class="title">未来领袖第一期报名活动</div>
+    <div class="desc">永远不要低估文字的力量。它可以构建或摧毁现实，赋予或抚平它可以构建或摧毁现实，赋予或抚平... </div>
+    <div class="p1">
+      <span class="time">2020/09/30</span>
+      <span class="price fr">￥<span class="num">20</span><span class="peo">/人</span></span>
+    </div>
+    <div class="p2">
+      <span>联系我们</span>
+      <image class="icon" mode="widthFix" src="../../static/images/wechat.png"/>
+      <image class="icon" mode="widthFix" src="../../static/images/phone.png"/>
+      <div class="btn fr">立即报名</div>
+    </div>
+    <div class="text-content">
+      这世界本就没有任何一句话，可以让你醍醐灌顶。真正叫你醍醐灌顶的，只能是一段经历。而那句话，只是火药仓库内划燃的一根火柴。
+    </div>
+    <div class="dialog">
+      <div class="content">
+        <!-- <image mode="aspectFill" class="title" src="../../static/images/contact_us.png"/> -->
+        <image class="qr-code"/>
+        <div class="main">
+          <div class="hint">扫描二维码添加微信</div>
+          <div class="wechat">微信号：WANKEMEISHASHUYUAN</div>
+          <div class="txt">其他备注信息说明</div>
+          <div class="foot">
+            <div class="btn">我知道了</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import wepy from '@wepy/core'
+wepy.page({
+
+})
+</script>
+<style lang="less" scoped>
+@import "../../static/style/common.less";
+.page{
+  padding: 0 28rpx;
+}
+.banner{
+  width:690rpx;
+  height:425rpx;
+  margin: 0 auto 24rpx;
+  border:1px solid;
+  border-radius: 10rpx;
+}
+.title{
+  font-size: 30rpx;
+  margin-bottom: 18rpx;
+}
+.desc{
+  color:#AEAEAE;
+  font-size: 24rpx;
+  margin-bottom: 32rpx;
+}
+.p1{
+  color:#666666;
+  padding-bottom: 30rpx;
+  border-bottom: 1px dashed #3B8DB5;
+  .time{
+    font-size: 26rpx;
+  }
+  .price{
+    font-size: 36rpx;
+    .num{
+      color:#F19149;
+      font-weight: bold;
+    }
+    .peo{
+      font-size: 18rpx;
+    }
+  }
+}
+.p2{
+  display: flex;
+  align-items: center;
+  padding: 26rpx 0 48rpx;
+  color:#3B8DB5;
+  font-size: 26rpx;
+  border-bottom:1px solid #DCDCDC;
+  .icon{
+    width:62rpx;
+    margin-left: 32rpx;
+  }
+  .btn{
+    margin-left: auto;
+    padding: 10rpx 38rpx;
+    margin-bottom: 4rpx;
+    font-size: 28rpx;
+    background-color:#3B8DB5;
+    color:#fff;
+    border-radius: 40rpx;
+  }
+}
+.text-content{
+  padding-top: 50rpx;
+}
+.dialog{
+  position: fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(0,0,0,0.65);
+  .content{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width:580rpx;
+    height:800rpx;
+    background-color:#fff;
+    border-radius: 10rpx;
+    .title{
+      width:580rpx;
+      height:246rpx;
+    }
+    .qr-code{
+      width:260rpx;
+      height:260rpx;
+      margin: 200rpx auto 14rpx;
+      border:1px solid;
+    }
+    .main{
+      width:468rpx;
+      margin:0 auto;
+    }
+    .hint{
+      font-size: 28rpx;
+      color:#999999;
+      margin-bottom:56rpx;
+      text-align: center;
+    }
+    .wechat{
+      color:#333333;
+      font-size: 24rpx;
+      margin-bottom: 18rpx;
+    }
+    .txt{
+      color:#999999;
+      font-size: 24rpx;
+      margin-bottom: 32rpx;
+    }
+    .foot{
+      border-top:1px solid #F7F7F7;
+      .btn{
+        width:326rpx;
+        height:54rpx;
+        margin: 26rpx auto;
+        font-size: 28rpx;
+        color:#fff;
+        text-align: center;
+        line-height: 54rpx;
+        background-color:#3B8DB5;
+        border-radius: 28rpx;
+      }
+    }
+  }
+}
+</style>

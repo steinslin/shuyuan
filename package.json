@@ -16,6 +16,7 @@
   "author": "183982946@qq.com",
   "license": "MIT",
   "dependencies": {
+    "@vant/weapp": "^1.5.1",
     "@wepy/core": "^2.0.0-alpha.9",
     "less-plugin-functions": "^1.0.0",
     "miniprogram-slide-view": "0.0.3",

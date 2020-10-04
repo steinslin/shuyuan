@@ -1,44 +1,47 @@
 <template>
   <div class="page">
     <van-tabs :active="tabIndex" @change="tabChange" color="#3C8DB5">
-      <van-tab title="未来领袖"></van-tab>
-      <van-tab title="开放日"></van-tab>
-      <van-tab title="ECHO"></van-tab>
+      <van-tab title="全部">
+        <activityOrderItem/>
+        <activityOrderItem/>
+        <activityOrderItem/>
+        <activityOrderItem/>
+      </van-tab>
+      <van-tab title="已预约">
+        <activityOrderItem/>
+        <activityOrderItem/>
+        <activityOrderItem/>
+      </van-tab>
+      <van-tab title="已结束">
+        <activityOrderItem/>
+        <activityOrderItem/>
+        <activityOrderItem/>
+      </van-tab>
+      <van-tab title="已取消">
+        <activityOrderItem/>
+        <activityOrderItem/>
+        <activityOrderItem/>
+      </van-tab>
     </van-tabs>
-    <div class="banner"></div>
-    <div class="list">
-      <activity-item/>
-      <activity-item/>
-      <activity-item/>
-      <activity-item/>
-    </div>
   </div>
 </template>
 <script>
   import wepy from '@wepy/core'
   wepy.page({
    data:{
-     tabIndex:0,
+     tabIndex:0
    },
    methods:{
      tabChange (e) {
-       
+       console.log(e)
      }
    }
   });
 </script>
 <style lang="less" scoped>
 @import "../../static/style/common.less";
-.banner{
-  width:694rpx;
-  height:288rpx;
-  margin:30rpx auto 48rpx;
-  border:1px solid;
-  border-radius: 12rpx;
-}
-.list{
-  padding: 28rpx 0;
-  background-color:#3C8DB5;
+.van-tabs__wrap{
+  margin-bottom: 20rpx;
 }
 </style>
 <wxs module="m1" lang="babel">
@@ -57,7 +60,7 @@ module.exports.getTime = getTime;
     "usingComponents": {
       "van-tab": "module:@vant/weapp/dist/tab/index",
       "van-tabs": "module:@vant/weapp/dist/tabs/index",
-      "activity-item": "../../components/activityItem"
+      "activityOrderItem": "../../components/activityOrderItem"
     }
 }
 </config>

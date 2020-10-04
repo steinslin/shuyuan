@@ -1,12 +1,6 @@
 <template>
   <div class="page">
-    <div class="banner"></div>
     <div class="container">
-      <div class="notice">
-        <image class="icon" src="../static/images/notice.png"/>
-        <span class="text">万科梅沙书院预约活动小程序正式上线啦...</span>
-        <image class="arrow-right" src="../static/images/arrow-right.png"/>
-      </div>
       <div class="text-wrap">
         <div class="title">活动现场</div>
         <div class="content">
@@ -16,14 +10,17 @@
           <image class="activity-img"/>
           <image class="activity-img"/>
           <image class="activity-img"/>
-          <image class="activity-img more"/>
         </div>
       </div>
       <div class="text-wrap">
-        <div class="title">书院档案</div>
+        <div class="title">开放日活动</div>
         <div class="content">
-          <p class="t-idt">深圳万科梅沙书院，于2015年成立，是万科与深圳中学共同创办的创新型国际化高中。 万科是世界五百强企业</p>
-          <p class="t-idt">深圳万科梅沙书院，于2015年成立，是万科与深圳中学共同创办的创新型国际化高中。 万科是世界五百强企业</p>
+          <image class="activity-img"/>
+          <image class="activity-img"/>
+          <image class="activity-img"/>
+          <image class="activity-img"/>
+          <image class="activity-img"/>
+          <image class="activity-img"/>
         </div>
       </div>
     </div>
@@ -35,46 +32,11 @@
    data:{
    },
    methods:{
-   },
-   async onLoad () {
-     let res = await this.$apis.banner({})
-     console.log(res)
    }
   });
 </script>
 <style lang="less" scoped>
-@import "../static/style/common.less";
-.banner{
-  height:769rpx;
-  background-color:#d6d6d6;
-}
-.notice{
-  display: flex;
-  align-items: center;
-  width:689rpx;
-  height:81rpx;
-  background:rgba(170, 170, 170, 0.13);
-  margin:54rpx auto 78rpx;
-  border-radius: 8rpx;
-  .icon{
-    width: 68rpx;
-    height: 68rpx;
-    flex-shrink: 0;
-    margin-left: 10rpx;
-  }
-  .text{
-    margin-left: 42rpx;
-    margin-right: 70rpx;
-    color:#999999;
-    font-size: 24rpx;
-  }
-  .arrow-right{
-    width:26rpx;
-    height:26rpx;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-}
+@import "../../static/style/common.less";
 .text-wrap{
   .title{
     color:#333333;
@@ -127,7 +89,7 @@ module.exports.getTime = getTime;
 <config>
 {
     "usingComponents": {
-      
+
     }
 }
 </config>

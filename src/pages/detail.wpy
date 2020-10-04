@@ -1,0 +1,39 @@
+<template>
+  <div class="page">
+    啊实打实的
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  wepy.page({
+   data:{
+   },
+   methods:{
+   }
+  });
+</script>
+<style lang="less" scoped>
+@import "../static/style/common.less";
+.page{
+  padding-top: 42rpx;
+}
+</style>
+<wxs module="m1" lang="babel">
+const getTime = (time) => {
+  let date = getDate(time);
+  let hour = date.getHours();
+  let mins = date.getMinutes();
+  let sec = date.getSeconds();
+  let milli = date.getMilliseconds();
+  return `${hour}:${mins}:${sec}.${milli}`;
+}
+module.exports.getTime = getTime;
+</wxs>
+<config>
+{
+    "navigationBarTitleText":"详情",
+    "usingComponents": {
+      
+    }
+}
+</config>

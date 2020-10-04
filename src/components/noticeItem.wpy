@@ -1,0 +1,81 @@
+<template>
+  <div class="notice-item">
+    <div class="title">
+      <image mode="widthFix" src="../static/images/voice.png" class="icon"/>
+      <span>万科梅沙书院预约活动小程序正式上线啦!!!</span>
+    </div>
+    <div class="desc">随着科学技术的发展，我们已经从工业时代进入到由信息、知识和创新引领的信息时代。这一转变对世界经济和我们的日常生活随着科学技术的发展，我们已经从工业时代进入到由信息、知识和创新引领的信息时代。这一转变对世界经济和我们的日常生活...   </div>
+    <div class="foot">
+      <span class="text">查看详情</span>
+      <image class="arrow-right" mode="widthFix" src="../static/images/arrow-right2.png"/>
+    </div>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  wepy.component({
+   methods:{
+     tabChange (e) {
+       console.log(e)
+     }
+   }
+  });
+</script>
+<style lang="less" scoped>
+@import "../static/style/common.less";
+.notice-item{
+  width:690rpx;
+  padding: 0 26rpx;
+  margin:0 auto 26rpx;
+  box-sizing: border-box;
+  background-color:#F8F8F8;
+  border-radius: 8rpx;
+  .title{
+    color:#343434;
+    font-size: 28rpx;
+    padding-top: 28rpx;
+    .icon{
+      display: inline-block;
+      width:35rpx;
+      position: relative;
+      top: 6rpx;
+      margin-right: 10rpx;
+    }
+  }
+  .desc{
+    color:#9A9A9A;
+    font-size: 22rpx;
+    margin: 30rpx 0;
+    height: 52rpx;
+    line-height: 26rpx;
+    .text-line(2);
+  }
+  .foot{
+    font-size: 24rpx;
+    color:#666666;
+    padding:8rpx 0;
+    border-top:1px solid #E7E7E7;
+    .arrow-right{
+      width:13rpx;
+      margin-top: 6rpx;
+      float:right;
+    }
+  }
+}
+</style>
+<wxs module="m1" lang="babel">
+const getTime = (time) => {
+  let date = getDate(time);
+  let hour = date.getHours();
+  let mins = date.getMinutes();
+  let sec = date.getSeconds();
+  let milli = date.getMilliseconds();
+  return `${hour}:${mins}:${sec}.${milli}`;
+}
+module.exports.getTime = getTime;
+</wxs>
+<config>
+{
+    
+}
+</config>

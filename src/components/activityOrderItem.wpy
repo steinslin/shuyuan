@@ -1,0 +1,127 @@
+<template>
+  <div class="activity-order-item">
+    <div class="head">
+      <div class="order-num">订单编号：1920903</div>
+      <div class="status s3">已取消</div>
+    </div>
+    <div class="main">
+      <image class="img no-img"/>
+      <div class="info">
+        <div class="title">未来领袖第一期报名报名报名报名</div>
+        <div class="desc">永远不要低估文字的力量。它可以构建或摧毁现实，赋予或抚赋予或抚</div>
+        <div class="txt">访校日期：2020/09/30</div>
+        <div class="txt">访校人数：2人</div>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="btn">问卷调查</div>
+      <div class="btn s2">查看详情</div>
+    </div>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  wepy.component({
+   methods:{
+     tabChange (e) {
+       console.log(e)
+     }
+   }
+  });
+</script>
+<style lang="less" scoped>
+@import "../static/style/common.less";
+page{
+  background-color:#F8F8F8;
+}
+.activity-order-item{
+  width:690rpx;
+  margin: 0 auto 28rpx;
+  background-color:#fff;
+  border-radius: 8rpx;
+  .head{
+    display: flex;
+    align-items: center;
+    padding: 0 28rpx;
+    font-size: 24rpx;
+    height:68rpx;
+    border-bottom: 1px solid #EDEFF2;
+    .order-num{
+      flex:1;
+      color:#9A9A9A;
+    }
+    .status{
+      flex:1;
+      text-align: right;
+      &.s2{
+        color:#F2924A;
+      }
+      &.s3{
+        color:red;
+      }
+    }
+  }
+  .main{
+    display: flex;
+    padding: 22rpx 28rpx;
+    border-bottom:1px solid #EDEFF2;
+    .img{
+      width:280rpx;
+      height:170rpx;
+      flex-shrink: 0;
+      border-radius: 8rpx;
+    }
+    .info{
+      margin-left: 16rpx;
+      .title{
+        font-size: 32rpx;
+        color:#343434;
+        .text-line(1);
+      }
+      .desc{
+        color:#AEAEAE;
+        font-size: 24rpx;
+        .text-line(2);
+      }
+      .txt{
+        color:#666666;
+        font-size: 22rpx;
+      }
+    }
+  }
+  .foot{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height:72rpx;
+    .btn{
+      font-size: 24rpx;
+      color:#3C8EB6;
+      padding: 6rpx 12rpx;
+      margin-right: 16rpx;
+      border:1px solid #3C8EB6;
+      border-radius: 40rpx;
+      &.s2{
+        color:#fff;
+        background-color:#3C8EB6;
+      }
+    }
+  }
+}
+</style>
+<wxs module="m1" lang="babel">
+const getTime = (time) => {
+  let date = getDate(time);
+  let hour = date.getHours();
+  let mins = date.getMinutes();
+  let sec = date.getSeconds();
+  let milli = date.getMilliseconds();
+  return `${hour}:${mins}:${sec}.${milli}`;
+}
+module.exports.getTime = getTime;
+</wxs>
+<config>
+{
+    
+}
+</config>

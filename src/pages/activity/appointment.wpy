@@ -1,0 +1,110 @@
+<template>
+  <div class="page">
+    <div class="activity-item">
+      <image class="img"/>
+      <div class="info">
+        <div class="title">未来领袖第一期报名活动</div>
+        <div class="desc">如果说梅沙书院跟深圳有什么共同点，那就是我们都年轻、奋进望突破自我。</div>
+      </div>
+    </div>
+    <div class="form">
+      <div class="item">
+        <div class="label">联系人</div>
+        <div class="text">YUAN</div>
+      </div>
+      <div class="item">
+        <div class="label">联系电话</div>
+        <div class="text">未填写</div>
+      </div>
+      <div class="item">
+        <div class="label">报名人数</div>
+        <div class="text">YUAN</div>
+      </div>
+      <div class="item">
+        <div class="label">年级(如含有学生请选择年级）</div>
+        <div class="text">YUAN</div>
+      </div>
+      <div class="item">
+        <div class="label">活动日期</div>
+        <div class="text">2020/09/30</div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  wepy.page({
+   data:{
+     tabIndex:0,
+   },
+   methods:{
+     tabChange (e) {
+       
+     }
+   }
+  });
+</script>
+<style lang="less" scoped>
+@import "../../static/style/common.less";
+.activity-item{
+  display: flex;
+  padding: 28rpx;
+  border-bottom:1px solid #DCDCDC;
+  .img{
+    width:280rpx;
+    height:170rpx;
+    border:1px solid;
+    border-radius: 10rpx;
+    flex-shrink: 0;
+  }
+  .info{
+    margin-left: 40rpx;
+    .title{
+      font-size: 30rpx;
+      color:#343434;
+      margin-bottom: 20rpx;
+    }
+    .desc{
+      color:#AEAEAE;
+      font-size: 26rpx;
+    }
+  }
+}
+.form{
+  padding: 0 28rpx;
+  .item{
+    display: flex;
+    font-size:28rpx;
+    padding: 20rpx 0;
+    color:#606266;
+    .label{
+      flex:1;
+      font-size: 28rpx;
+    }
+    .text{
+      text-align: auto;
+    }
+  }
+}
+</style>
+<wxs module="m1" lang="babel">
+const getTime = (time) => {
+  let date = getDate(time);
+  let hour = date.getHours();
+  let mins = date.getMinutes();
+  let sec = date.getSeconds();
+  let milli = date.getMilliseconds();
+  return `${hour}:${mins}:${sec}.${milli}`;
+}
+module.exports.getTime = getTime;
+</wxs>
+<config>
+{
+    "navigationBarTitleText":"报名信息",
+    "usingComponents": {
+      "van-tab": "module:@vant/weapp/dist/tab/index",
+      "van-tabs": "module:@vant/weapp/dist/tabs/index",
+      "activity-item": "../../components/activityItem"
+    }
+}
+</config>

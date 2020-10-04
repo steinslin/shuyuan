@@ -1,6 +1,25 @@
 <template>
   <div class="page">
-    activity
+    <div class="user">
+      <open-data type="userAvatarUrl" class="avatar"></open-data>
+      <span class="name">ABCDE</span>
+    </div>
+    <div class="main">
+      <van-cell-group>
+        <van-cell title="活动预约记录" :is-link="true" url="/pages/my/activityOrderList">
+          <image mode="widthFix" class="icon" slot="icon" src="../../static/images/activity-icon.png"/>
+        </van-cell>
+        <van-cell title="访校预约记录" :is-link="true">
+          <image mode="widthFix" class="icon" slot="icon" src="../../static/images/school-icon.png"/>
+        </van-cell>
+        <van-cell title="意见反馈" :is-link="true">
+          <image mode="widthFix" class="icon" slot="icon" src="../../static/images/feeback-icon.png"/>
+        </van-cell>
+        <van-cell title="关于我们" :is-link="true">
+          <image mode="widthFix" class="icon" slot="icon" src="../../static/images/about-icon.png"/>
+        </van-cell>
+      </van-cell-group>
+    </div>
   </div>
 </template>
 <script>
@@ -14,6 +33,32 @@
 </script>
 <style lang="less" scoped>
 @import "../../static/style/common.less";
+.user{
+  position: relative;
+  display:flex;
+  align-items: center;
+  height:174rpx;
+  padding-left:30rpx;
+  background-color:#fff;
+  .avatar{
+    flex:none;
+    width:124rpx;
+    height:124rpx;
+    margin-right: 46rpx;
+    border-radius: 50%;
+    overflow:hidden;
+  }
+  .name{
+    font-size: 40rpx;
+  }
+}
+.main{
+  .icon{
+    margin-top: 6rpx;
+    margin-right: 20rpx;
+    width:36rpx;
+  }
+}
 </style>
 <wxs module="m1" lang="babel">
 const getTime = (time) => {
@@ -29,7 +74,8 @@ module.exports.getTime = getTime;
 <config>
 {
     "usingComponents": {
-
+      "van-cell": "module:@vant/weapp/dist/cell/index",
+      "van-cell-group": "module:@vant/weapp/dist/cell-group/index",
     }
 }
 </config>

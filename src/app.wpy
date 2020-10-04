@@ -36,12 +36,20 @@ wepy.app({
 {
     pages: [
       "pages/index",
+      "pages/notice",
+      "pages/detail",
+      "pages/appointSuccess",
+      "pages/signUpSuccess",
       "pages/school/index",
       "pages/activity/index",
-      "pages/my/index"
+      "pages/activity/detail",
+      "pages/activity/picture",
+      "pages/activity/appointment",
+      "pages/my/index",
+      "pages/my/activityOrderList"
     ],
     window: {
-      "navigationBarTitleText":"梅沙书院",
+      "navigationBarTitleText":"深圳市万科城梅沙书院",
       "navigationBarBackgroundColor": "#FFF",
       "navigationBarTextStyle": "black",
       "backgroundColor": "#eeeeee",

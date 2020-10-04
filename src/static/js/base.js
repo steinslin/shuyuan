@@ -1,12 +1,12 @@
 export default class Api {
   constructor(obj) {
     // this.host = '192.168.0.199';
-    this.host = "app.pm.yinsitan.cn";
-    // this.host = '39.105.206.211'
-    // this.port = "8009";
-    // this.baseUrl = "http://" + this.host + (this.port ? (":" + this.port) : "");
-    this.baseUrl = "https://" + this.host + (this.port ? (":" + this.port) : "");
-    this.appid =  "wx3c83689aa24cf8e1";
+    // this.host = "app.pm.yinsitan.cn";
+    this.host = '120.79.41.141'
+    this.port = "8585";
+    this.baseUrl = "http://" + this.host + (this.port ? (":" + this.port) : "");
+    // this.baseUrl = "https://" + this.host + (this.port ? (":" + this.port) : "");
+    this.appid =  "wx2a1b10b5cf6adaff";
     this.limit = 10000;
     this.url = "";
     this.data = "";
@@ -23,14 +23,19 @@ export default class Api {
   }
   //基础请求方法,返回请求到的数据
   async ajax() {
-    // wx.getStorageSync('token')  ||  wx.setStorageSync('token', await this.getToken());
+    let token = wx.getStorageSync('token') || await this.getToken()
+    wx.setStorageSync('token', token);
     console.log("本次的请求链接", this.baseUrl + this.url) 
+    console.log(token) 
     
     let result = await new Promise((resolve, reject) => {
       wx.request({
         url: this.baseUrl + this.url,
         data: this.data,
-        header: {"Authorization": "Bearer " + wx.getStorageSync('token')},
+        header: {
+          'content-type':'application/x-www-form-urlencoded', // 默认值
+          'Cookie':'JSESSIONID='+token
+        },
         method: this.method.toUpperCase(),
         success(res) {
           if(res && res.statusCode == 200){
@@ -87,14 +92,16 @@ export default class Api {
       wx.login({
         success(res) {
           let {code} = res;
-          console.log("code:",code)
           wx.request({
-            url : `${_this.baseUrl}/oauth/access_token`,
+            url : `${_this.baseUrl}/weixinpay/GetOpenId`,
             data : {code:code},
-            header : {'content-type':'application/json'},
+            header : {
+              'content-type':'application/x-www-form-urlencoded', // 默认值
+              'Cookie':'JSESSIONID='
+            },
             method : "POST",
             success(res){
-              let token = res.data.data.access_token;
+              let token = res.data.sessionid;
               resolve(token)
             },
             fail(err){reject("微信请求失败:",err)},
