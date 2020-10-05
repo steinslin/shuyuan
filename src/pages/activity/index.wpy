@@ -5,12 +5,11 @@
       <van-tab title="开放日"></van-tab>
       <van-tab title="ECHO"></van-tab>
     </van-tabs>
-    <div class="banner"></div>
+    <div class="banner">
+      <banner :list="bannerList" height="288"/>
+    </div>
     <div class="list">
-      <activity-item/>
-      <activity-item/>
-      <activity-item/>
-      <activity-item/>
+      <activity-item btnText="立即报名"/>
     </div>
   </div>
 </template>
@@ -19,11 +18,16 @@
   wepy.page({
    data:{
      tabIndex:0,
+     bannerList:[]
    },
    methods:{
      tabChange (e) {
        
      }
+   },
+   async onLoad () {
+     let banner = await this.$apis.banner({})
+     this.bannerList = banner.rows
    }
   });
 </script>
@@ -33,8 +37,8 @@
   width:694rpx;
   height:288rpx;
   margin:30rpx auto 48rpx;
-  border:1px solid;
   border-radius: 12rpx;
+  overflow: hidden;
 }
 .list{
   padding: 28rpx 0;
@@ -57,7 +61,8 @@ module.exports.getTime = getTime;
     "usingComponents": {
       "van-tab": "module:@vant/weapp/dist/tab/index",
       "van-tabs": "module:@vant/weapp/dist/tabs/index",
-      "activity-item": "../../components/activityItem"
+      "activity-item": "../../components/activityItem",
+      "banner":"../../components/banner"
     }
 }
 </config>

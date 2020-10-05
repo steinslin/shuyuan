@@ -1,6 +1,12 @@
 <template>
   <div class="page">
-    sadg
+    <div class="tabs">
+      <div class="item on">预约访校</div>
+      <div class="item">活动报名</div>
+    </div>
+    <div class="list">
+      <activity-item btnText="立即预约"/>
+    </div>
   </div>
 </template>
 <script>
@@ -14,6 +20,24 @@
 </script>
 <style lang="less" scoped>
 @import "../../static/style/common.less";
+.tabs{
+  display: flex;
+  height:80rpx;
+  line-height: 80rpx;
+  .item{
+    flex:1;
+    color:#999999;
+    text-align: center;
+    font-size: 28rpx;
+    &.on{
+      color: #3B8DB5;
+      border-bottom:5rpx solid #3B8DB5;
+    }
+  }
+}
+.list{
+  padding-top: 28rpx;
+}
 </style>
 <wxs module="m1" lang="babel">
 const getTime = (time) => {
@@ -29,7 +53,7 @@ module.exports.getTime = getTime;
 <config>
 {
     "usingComponents": {
-
+      "activity-item": "../../components/activityItem"
     }
 }
 </config>

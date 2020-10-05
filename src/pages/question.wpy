@@ -1,0 +1,152 @@
+<template>
+  <div class="page">
+    <image class="show" mode="widthFix" src="../static/images/question.png"/>
+    <div class="panel">
+      <div class="head">
+        <span class="title">1. 您对万科梅沙书院的满意程度</span>
+        <span class="status fr">单选</span>
+      </div>
+      <div class="content">
+        <div class="check-wrap">
+          <div class="item">
+            <div class="circle on"></div>
+            <div class="text">十分满意</div>
+          </div>
+          <div class="item">
+            <div class="circle on"></div>
+            <div class="text">满意</div>
+          </div>
+          <div class="item">
+            <div class="circle on"></div>
+            <div class="text">一般</div>
+          </div>
+          <div class="item">
+            <div class="circle on"></div>
+            <div class="text">不满意</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="head">
+        <span class="title">2. 您对万科梅沙书院有什么建议</span>
+        <!-- <span class="status fr">单选</span> -->
+      </div>
+      <div class="content">
+        <textarea class="advice" :value="advice" placeholder="请写下你想对万科梅沙书院说的建议"/>
+      </div>
+    </div>
+    <div class="submit">提交问卷</div>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  wepy.page({
+   data:{
+   },
+   methods:{
+   }
+  });
+</script>
+<style lang="less" scoped>
+@import "../static/style/common.less";
+page{
+  background-color:#F8F8F8;
+}
+.show{
+  width:100%;
+}
+.panel{
+  width:690rpx;
+  margin:30rpx auto;
+  padding: 20rpx 20rpx 0;
+  background-color:#fff;
+  color:#333333;
+  box-sizing: border-box;
+  .head{
+    font-size: 30rpx;
+    .title{}
+    .status{
+      color:#3B8DB5;
+      font-size: 28rpx;
+    }
+  }
+}
+.check-wrap{
+  .item{
+    height:80rpx;
+    line-height: 80rpx;
+    font-size: 24rpx;
+    border-bottom: 1px solid #F1F1F1;
+    &:last-child{
+      border-bottom: 0;
+    }
+    .circle{
+      display: inline-block;
+      vertical-align: -4rpx;
+      width:24rpx;
+      height:24rpx;
+      border-radius: 50%;
+      border:1px solid #999999;
+      &.on{
+        position: relative;
+        border:1px solid #3B8DB5;
+        &:before{
+          content: "";
+          position: absolute;
+          top: 4rpx;
+          left: 4rpx;
+          width: 16rpx;
+          height: 16rpx;
+          background-color: #3B8DB5;
+          border-radius: 50%;
+        }
+      }
+    }
+    .text{
+      display: inline-block;
+      padding-left: 20rpx;
+    }
+  }
+}
+.advice{
+  width:650rpx;
+  height:280rpx;
+  font-size: 24rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  margin: 20rpx 0;
+  background-color:#F1F1F1;
+  border-radius: 8rpx;
+}
+.submit{
+  width: 350rpx;
+  height: 88rpx;
+  margin: 0 auto 40rpx;
+  text-align: center;
+  line-height: 88rpx;
+  color:#fff;
+  background: #3B8DB5;
+  box-shadow: 0px 20px 25px 0px rgba(59, 141, 181, 0.4);
+  border-radius: 44px;
+}
+</style>
+<wxs module="m1" lang="babel">
+const getTime = (time) => {
+  let date = getDate(time);
+  let hour = date.getHours();
+  let mins = date.getMinutes();
+  let sec = date.getSeconds();
+  let milli = date.getMilliseconds();
+  return `${hour}:${mins}:${sec}.${milli}`;
+}
+module.exports.getTime = getTime;
+</wxs>
+<config>
+{
+    "navigationBarTitleText":"问卷调查",
+    "usingComponents": {
+      
+    }
+}
+</config>

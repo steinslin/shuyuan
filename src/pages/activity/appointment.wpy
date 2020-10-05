@@ -5,30 +5,51 @@
       <div class="info">
         <div class="title">未来领袖第一期报名活动</div>
         <div class="desc">如果说梅沙书院跟深圳有什么共同点，那就是我们都年轻、奋进望突破自我。</div>
+        <div class="price">￥<span class="num">20</span>/人 </div>
       </div>
     </div>
     <div class="form">
       <div class="item">
         <div class="label">联系人</div>
-        <div class="text">YUAN</div>
+        <input type="input" class="input" placeholder="请填写联系人"/>
       </div>
       <div class="item">
         <div class="label">联系电话</div>
-        <div class="text">未填写</div>
+        <input type="input" class="input" placeholder="请填写联系电话"/>
       </div>
       <div class="item">
         <div class="label">报名人数</div>
-        <div class="text">YUAN</div>
+        <div class="text">
+          <van-stepper :value="num" @change="numChange"/>
+        </div>
       </div>
-      <div class="item">
+      <div class="item" @click="gradeShow=true">
         <div class="label">年级(如含有学生请选择年级）</div>
-        <div class="text">YUAN</div>
+        <input type="input" class="input" placeholder="请选择年级" :disabled="true" :value="columns[gradeIndex]"/>
       </div>
       <div class="item">
         <div class="label">活动日期</div>
         <div class="text">2020/09/30</div>
       </div>
+      <div class="item bk">
+        <div class="label">备注(可备注留言）</div>
+        <div class="text">
+          <textarea class="remark" type="text" placeholder="请填写备注(不多于200字)"/>
+        </div>
+      </div>
     </div>
+    <van-popup position="bottom" :show="gradeShow" @close="gradeShow = false">
+      <van-picker 
+        title="年级选择" 
+        :show-toolbar="true" 
+        toolbar-position="top" 
+        :columns="columns" 
+        @change="pickerChange"
+        @cancel="gradeShow = false"
+        @confirm="gradeShow = false"
+      />
+    </van-popup>
+    <shop-bar/>
   </div>
 </template>
 <script>
@@ -36,11 +57,23 @@
   wepy.page({
    data:{
      tabIndex:0,
+     num:0,
+     gradeShow:false,
+     gradeIndex:0,
+     columns: ['无', '一年级', '二年级', '三年级'],
    },
    methods:{
      tabChange (e) {
        
-     }
+     },
+     numChange () {
+
+     },
+     pickerChange(e) {
+      const { picker, value, index } = e.$wx.detail;
+      this.gradeIndex = index
+      console.log(`当前值：${value}, 当前索引：${index}`);
+    },
    }
   });
 </script>
@@ -49,6 +82,7 @@
 .activity-item{
   display: flex;
   padding: 28rpx;
+  align-items: center;
   border-bottom:1px solid #DCDCDC;
   .img{
     width:280rpx;
@@ -67,6 +101,15 @@
     .desc{
       color:#AEAEAE;
       font-size: 26rpx;
+      margin-bottom: 14rpx;
+      .text-line(2);
+    }
+    .price{
+      .num{
+        color:#F19149;
+        font-weight: bold;
+        font-size: 36rpx;
+      }
     }
   }
 }
@@ -83,6 +126,18 @@
     }
     .text{
       text-align: auto;
+      .remark{
+        width:690rpx;
+        height:298rpx;
+        margin-top: 30rpx;
+        padding: 30rpx;
+        background-color:#f5f5f5;
+        border-radius: 8rpx;
+        box-sizing: border-box;
+      }
+    }
+    .input{
+      text-align: right;
     }
   }
 }
@@ -104,7 +159,11 @@ module.exports.getTime = getTime;
     "usingComponents": {
       "van-tab": "module:@vant/weapp/dist/tab/index",
       "van-tabs": "module:@vant/weapp/dist/tabs/index",
-      "activity-item": "../../components/activityItem"
+      "van-stepper": "module:@vant/weapp/dist/stepper/index",
+      "van-popup": "module:@vant/weapp/dist/popup/index",
+      "van-picker": "module:@vant/weapp/dist/picker/index",
+      "activity-item": "../../components/activityItem",
+      "shop-bar":"../../components/shopBar"
     }
 }
 </config>

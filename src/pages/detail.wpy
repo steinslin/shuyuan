@@ -1,14 +1,22 @@
 <template>
   <div class="page">
-    啊实打实的
+    <import src="../components/wxParse/wxParse.wxml"/>
+    <wx-template is="wxParse" data="{{wxParseData:article.nodes}}"/>
   </div>
 </template>
 <script>
   import wepy from '@wepy/core'
+  let WxParse = require('../components/wxParse/wxParse.js')
   wepy.page({
    data:{
    },
    methods:{
+   },
+   async onLoad (param) {
+     console.log(param)
+     let info = await this.$apis.noticeSel(param.noticeid)
+     this.detail = info.notice.noticeContent?info.notice.noticeContent:"暂无数据"
+     WxParse.wxParse('article', 'html', this.detail, this.$wx, 20)
    }
   });
 </script>

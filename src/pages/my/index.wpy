@@ -9,10 +9,10 @@
         <van-cell title="活动预约记录" :is-link="true" url="/pages/my/activityOrderList">
           <image mode="widthFix" class="icon" slot="icon" src="../../static/images/activity-icon.png"/>
         </van-cell>
-        <van-cell title="访校预约记录" :is-link="true">
+        <van-cell title="访校预约记录" :is-link="true" url="/pages/my/schoolOrderList">
           <image mode="widthFix" class="icon" slot="icon" src="../../static/images/school-icon.png"/>
         </van-cell>
-        <van-cell title="意见反馈" :is-link="true">
+        <van-cell title="问卷调查" :is-link="true" url="/pages/question">
           <image mode="widthFix" class="icon" slot="icon" src="../../static/images/feeback-icon.png"/>
         </van-cell>
         <van-cell title="关于我们" :is-link="true">

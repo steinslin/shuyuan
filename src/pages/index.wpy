@@ -1,29 +1,26 @@
 <template>
   <div class="page">
-    <div class="banner"></div>
+    <import src="../components/wxParse/wxParse.wxml"/>
+    <div class="banner">
+      <banner :list="bannerList" height="769"/>
+    </div>
     <div class="container">
-      <div class="notice">
+      <navigator url="/pages/notice" class="notice" hover-class="none">
         <image class="icon" src="../static/images/notice.png"/>
         <span class="text">万科梅沙书院预约活动小程序正式上线啦...</span>
         <image class="arrow-right" src="../static/images/arrow-right.png"/>
-      </div>
+      </navigator>
       <div class="text-wrap">
         <div class="title">活动现场</div>
         <div class="content">
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
+          <image class="activity-img" :src="item" v-for="(item, index) in actPhotoList" :key="index"/>
           <image class="activity-img more"/>
         </div>
       </div>
       <div class="text-wrap">
         <div class="title">书院档案</div>
         <div class="content">
-          <p class="t-idt">深圳万科梅沙书院，于2015年成立，是万科与深圳中学共同创办的创新型国际化高中。 万科是世界五百强企业</p>
-          <p class="t-idt">深圳万科梅沙书院，于2015年成立，是万科与深圳中学共同创办的创新型国际化高中。 万科是世界五百强企业</p>
+          <wx-template is="wxParse" data="{{wxParseData:article.nodes}}"/>
         </div>
       </div>
     </div>
@@ -31,14 +28,23 @@
 </template>
 <script>
   import wepy from '@wepy/core'
+  let WxParse = require('../components/wxParse/wxParse.js')
   wepy.page({
    data:{
+     bannerList:[],
+     actPhotoList:[],
+     detail:""
    },
    methods:{
    },
    async onLoad () {
-     let res = await this.$apis.banner({})
-     console.log(res)
+     let banner = await this.$apis.banner({})
+     this.bannerList = banner.rows
+     let actPhotoList= await this.$apis.actPhotoList({})
+     this.actPhotoList = actPhotoList.rows[0].imgs.split(",")
+     let info = await this.$apis.agreementView({type:1})
+     this.detail = info.agreement.context?info.agreement.context:"暂无数据"
+     WxParse.wxParse('article', 'html', this.detail, this.$wx, 20)
    }
   });
 </script>
@@ -127,7 +133,7 @@ module.exports.getTime = getTime;
 <config>
 {
     "usingComponents": {
-      
+      "banner":"../components/banner"
     }
 }
 </config>

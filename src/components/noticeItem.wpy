@@ -1,10 +1,10 @@
 <template>
-  <div class="notice-item">
+  <navigator :url="'/pages/detail?noticeid='+obj.noticeId" class="notice-item" hover-class="none">
     <div class="title">
       <image mode="widthFix" src="../static/images/voice.png" class="icon"/>
-      <span>万科梅沙书院预约活动小程序正式上线啦!!!</span>
+      <span>{{obj.noticeTitle}}</span>
     </div>
-    <div class="desc">随着科学技术的发展，我们已经从工业时代进入到由信息、知识和创新引领的信息时代。这一转变对世界经济和我们的日常生活随着科学技术的发展，我们已经从工业时代进入到由信息、知识和创新引领的信息时代。这一转变对世界经济和我们的日常生活...   </div>
+    <div class="desc">{{obj.noticeContent}}</div>
     <div class="foot">
       <span class="text">查看详情</span>
       <image class="arrow-right" mode="widthFix" src="../static/images/arrow-right2.png"/>
@@ -14,6 +14,7 @@
 <script>
   import wepy from '@wepy/core'
   wepy.component({
+   props:["obj"],
    methods:{
      tabChange (e) {
        console.log(e)

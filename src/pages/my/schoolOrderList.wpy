@@ -7,7 +7,7 @@
         <activityOrderItem/>
         <activityOrderItem/>
       </van-tab>
-      <van-tab title="已报名">
+      <van-tab title="已预约">
         <activityOrderItem/>
         <activityOrderItem/>
         <activityOrderItem/>

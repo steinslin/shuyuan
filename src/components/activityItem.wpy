@@ -1,18 +1,25 @@
 <template>
-  <div class="activity-item">
+  <div class="activity-item" @click="detail">
     <img class="img no-img"/>
     <div class="info">
       <div class="title">未来领袖第一期报名活动未来领袖第一期报名活动</div>
       <div class="desc">永远不要低估文字的力量。它可以构建或摧毁现实，赋予或抚平永远不要低估文字的力量。它可以构建或摧毁现实，赋予或抚平</div>
       <div class="time"><image mode="widthFix" class="icon" src="../static/images/time.png"/>2020/09/30</div>
-      <div class="btn fr">立即报名</div>
+      <div class="btn fr">{{btnText}}</div>
     </div>
   </div>
 </template>
 <script>
 import wepy from '@wepy/core'
 wepy.component({
-
+  props:["btnText"],
+  methods:{
+    detail () {
+      wx.navigateTo({
+        url:"/pages/activity/detail"
+      })
+    }
+  }
 })
 </script>
 <style lang="less" scoped>

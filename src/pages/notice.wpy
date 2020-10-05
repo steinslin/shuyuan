@@ -1,15 +1,19 @@
 <template>
   <div class="page">
-    <notice-item/>
-    <notice-item/>
+    <notice-item :obj="item" v-for="(item, index) in noticeList" :key="index"/>
   </div>
 </template>
 <script>
   import wepy from '@wepy/core'
   wepy.page({
    data:{
+     noticeList:[]
    },
    methods:{
+   },
+   async onLoad () {
+     let noticeList = await this.$apis.noticeList({})
+     this.noticeList = noticeList.rows
    }
   });
 </script>

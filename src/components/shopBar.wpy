@@ -1,0 +1,68 @@
+<template>
+  <div class="shop-bar">
+    <div class="pan">
+      合计：<span class="price">￥20</span> 
+    </div>
+    <div class="btn">立即支付</div>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  wepy.component({
+   
+  });
+</script>
+<style lang="less" scoped>
+@import "../static/style/common.less";
+.shop-bar{
+  display: flex;
+  position: fixed;
+  left:50%;
+  bottom:16rpx;
+  width:710rpx;
+  height:98rpx;
+  transform: translateX(-50%);
+  .pan{
+    width:408rpx;
+    height:98rpx;
+    line-height: 98rpx;
+    font-size: 24rpx;
+    font-weight: 400;
+    color:#3B8DB5;
+    padding-left: 40rpx;
+    background:rgba(59, 141, 181, 0.16);
+    border-radius: 49px 6px 6px 49px;
+    .price{
+      font-size: 40rpx;
+      vertical-align: -2rpx;
+    }
+  }
+  .btn{
+    width:296rpx;
+    height:98rpx;
+    text-align: center;
+    line-height: 98rpx;
+    background: #3B8DB5;
+    font-size: 38rpx;
+    color:#fff;
+    margin-left: 4rpx;
+    border-radius: 6px 49px 49px 6px;
+  }
+}
+</style>
+<wxs module="m1" lang="babel">
+const getTime = (time) => {
+  let date = getDate(time);
+  let hour = date.getHours();
+  let mins = date.getMinutes();
+  let sec = date.getSeconds();
+  let milli = date.getMilliseconds();
+  return `${hour}:${mins}:${sec}.${milli}`;
+}
+module.exports.getTime = getTime;
+</wxs>
+<config>
+{
+    
+}
+</config>

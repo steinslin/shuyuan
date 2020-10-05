@@ -38,6 +38,7 @@ wepy.app({
       "pages/index",
       "pages/notice",
       "pages/detail",
+      "pages/question",
       "pages/appointSuccess",
       "pages/signUpSuccess",
       "pages/school/index",
@@ -46,7 +47,8 @@ wepy.app({
       "pages/activity/picture",
       "pages/activity/appointment",
       "pages/my/index",
-      "pages/my/activityOrderList"
+      "pages/my/activityOrderList",
+      "pages/my/schoolOrderList"
     ],
     window: {
       "navigationBarTitleText":"深圳市万科城梅沙书院",
