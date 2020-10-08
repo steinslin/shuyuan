@@ -2,7 +2,8 @@
   <div class="page">
     <div class="user">
       <open-data type="userAvatarUrl" class="avatar"></open-data>
-      <span class="name">ABCDE</span>
+      <span class="name" v-if="userInfo">{{userInfo.nickName}}</span>
+      <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" v-else> 授权获取头像昵称 </button>
     </div>
     <div class="main">
       <van-cell-group>
@@ -12,10 +13,10 @@
         <van-cell title="访校预约记录" :is-link="true" url="/pages/my/schoolOrderList">
           <image mode="widthFix" class="icon" slot="icon" src="../../static/images/school-icon.png"/>
         </van-cell>
-        <van-cell title="问卷调查" :is-link="true" url="/pages/question">
+        <van-cell title="个人反馈" :is-link="true" url="">
           <image mode="widthFix" class="icon" slot="icon" src="../../static/images/feeback-icon.png"/>
         </van-cell>
-        <van-cell title="关于我们" :is-link="true">
+        <van-cell title="关于我们" :is-link="true" url="/pages/my/aboutUs">
           <image mode="widthFix" class="icon" slot="icon" src="../../static/images/about-icon.png"/>
         </van-cell>
       </van-cell-group>
@@ -26,8 +27,38 @@
   import wepy from '@wepy/core'
   wepy.page({
    data:{
+     userInfo:""
    },
    methods:{
+     getUserInfo: function(e) {
+      let that = this;
+      // console.log(e)
+      // 获取用户信息
+      wx.getSetting({
+        success(res) {
+          // console.log("res", res)
+          if (res.authSetting['scope.userInfo']) {
+            console.log("已授权=====")
+            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+            wx.getUserInfo({
+              success(res) {
+                console.log("获取用户信息成功", res)
+                that.userInfo = res.userInfo
+                wx.setStorageSync("userInfo",res.userInfo)
+              },
+              fail(res) {
+                console.log("获取用户信息失败", res)
+              }
+            })
+          } else {
+            console.log("未授权=====")
+          }
+        }
+      })
+    },
+   },
+   onLoad () {
+     this.userInfo = wx.getStorageSync("userInfo") || ""
    }
   });
 </script>

@@ -1,26 +1,26 @@
 <template>
   <div class="page">
     <div class="activity-item">
-      <image class="img"/>
+      <image class="img" :src="detail.activityImg"/>
       <div class="info">
-        <div class="title">未来领袖第一期报名活动</div>
-        <div class="desc">如果说梅沙书院跟深圳有什么共同点，那就是我们都年轻、奋进望突破自我。</div>
-        <div class="price">￥<span class="num">20</span>/人 </div>
+        <div class="title">{{detail.activityTitle}}</div>
+        <div class="desc">{{detail.introduce}}</div>
+        <div class="price">￥<span class="num">{{detail.activityPrice}}</span>/人 </div>
       </div>
     </div>
     <div class="form">
       <div class="item">
         <div class="label">联系人</div>
-        <input type="input" class="input" placeholder="请填写联系人"/>
+        <input type="input" class="input" placeholder="请填写联系人" v-model="form.contacts"/>
       </div>
       <div class="item">
         <div class="label">联系电话</div>
-        <input type="input" class="input" placeholder="请填写联系电话"/>
+        <input type="number" class="input" placeholder="请填写联系电话" v-model="form.contactsTel" maxlength="11"/>
       </div>
       <div class="item">
         <div class="label">报名人数</div>
         <div class="text">
-          <van-stepper :value="num" @change="numChange"/>
+          <van-stepper :max="detail.number" :value="form.number" @change="numChange"/>
         </div>
       </div>
       <div class="item" @click="gradeShow=true">
@@ -29,12 +29,12 @@
       </div>
       <div class="item">
         <div class="label">活动日期</div>
-        <div class="text">2020/09/30</div>
+        <div class="text">{{detail.startTime}}</div>
       </div>
       <div class="item bk">
         <div class="label">备注(可备注留言）</div>
         <div class="text">
-          <textarea class="remark" type="text" placeholder="请填写备注(不多于200字)"/>
+          <textarea class="remark" type="text" placeholder="请填写备注(不多于200字)" v-model="form.orderRemarks"/>
         </div>
       </div>
     </div>
@@ -49,31 +49,86 @@
         @confirm="gradeShow = false"
       />
     </van-popup>
-    <shop-bar/>
+    <shop-bar :price="detail.activityPrice * form.number" @pay="pay"/>
   </div>
 </template>
 <script>
   import wepy from '@wepy/core'
   wepy.page({
    data:{
+     param:{},
+     detail:{},
      tabIndex:0,
      num:0,
      gradeShow:false,
      gradeIndex:0,
      columns: ['无', '一年级', '二年级', '三年级'],
+     form:{
+       contactsTel:"",
+       contacts:"",
+       number:1,
+       grade:"",
+       orderRemarks:""
+     }
    },
    methods:{
      tabChange (e) {
        
      },
-     numChange () {
-
+     numChange (e) {
+       this.form.number = e.$wx.detail
      },
      pickerChange(e) {
       const { picker, value, index } = e.$wx.detail;
       this.gradeIndex = index
+      this.form.grade = this.columns[this.gradeIndex]
       console.log(`当前值：${value}, 当前索引：${index}`);
-    },
+     },
+     async pay () {
+       let token = (await this.$apis.getToken()).token
+       let orderAdd = await this.$apis.orderActivityAdd({
+         activityId:this.param.activityid,
+         token,
+         contactsTel:this.form.contactsTel,
+         contacts:this.form.contacts,
+         number:this.form.number,
+         wx:this.form.contacts,
+         grade:this.columns[this.gradeIndex],
+         orderRemarks:this.form.orderRemarks
+       })
+       if(orderAdd.code == 0){
+         if(this.detail.isFree !== 0){
+          try{
+            let wxPay = await this.$apis.wxPay({
+              activityId: this.param.activityid,
+              orderId: orderAdd.orderId,
+              number:this.form.number,
+              grade:this.columns[this.gradeIndex]
+            },"HD")
+          }catch(err){
+            this.$showToast("支付失败")
+            return
+          }
+         }
+         if(this.detail.isPast == -1){
+            wx.redirectTo({
+              url:`/pages/my/schoolOrderList`,
+            })
+          }
+          if(this.detail.isPast == 1){
+            wx.redirectTo({
+              url:`/pages/my/activityOrderList`
+            })
+          }
+       }else{
+         this.$showToast(orderAdd.msg, 2000)
+       }
+     }
+   },
+   async onLoad (param) {
+     let detail = await this.$apis.activityInfoSel(param.activityid)
+     this.detail = detail.activityInfo
+     this.param = param
    }
   });
 </script>
@@ -87,7 +142,6 @@
   .img{
     width:280rpx;
     height:170rpx;
-    border:1px solid;
     border-radius: 10rpx;
     flex-shrink: 0;
   }
@@ -117,12 +171,13 @@
   padding: 0 28rpx;
   .item{
     display: flex;
-    font-size:28rpx;
+    font-size:26rpx;
     padding: 20rpx 0;
     color:#606266;
     .label{
       flex:1;
-      font-size: 28rpx;
+      display: flex;
+      align-items: center;
     }
     .text{
       text-align: auto;

@@ -1,15 +1,20 @@
 <template>
   <div class="shop-bar">
     <div class="pan">
-      合计：<span class="price">￥20</span> 
+      合计：<span class="price">￥{{price}}</span> 
     </div>
-    <div class="btn">立即支付</div>
+    <div class="btn" @click="pay">立即支付</div>
   </div>
 </template>
 <script>
   import wepy from '@wepy/core'
   wepy.component({
-   
+    props:["price"],
+    methods:{
+      pay () {
+        this.$emit("pay")
+      }
+    }
   });
 </script>
 <style lang="less" scoped>

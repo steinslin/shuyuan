@@ -1,27 +1,28 @@
 <template>
   <div class="page">
-    <import src="../components/wxParse/wxParse.wxml"/>
+    <import src="../../components/wxParse/wxParse.wxml"/>
     <wx-template is="wxParse" data="{{wxParseData:article.nodes}}"/>
   </div>
 </template>
 <script>
   import wepy from '@wepy/core'
-  let WxParse = require('../components/wxParse/wxParse.js')
+  let WxParse = require('../../components/wxParse/wxParse.js')
   wepy.page({
    data:{
+       detail:""
    },
    methods:{
    },
    async onLoad (param) {
      console.log(param)
-     let info = await this.$apis.noticeSel(param.noticeid)
-     this.detail = info.notice.noticeContent?info.notice.noticeContent:"暂无数据"
+     let navigaInfoSel = await this.$apis.navigaInfoSel(param.id)
+     this.detail = navigaInfoSel.navigaInfo.navDesc?navigaInfoSel.navigaInfo.navDesc:"暂无数据"
      WxParse.wxParse('article', 'html', this.detail, this.$wx, 20)
    }
   });
 </script>
 <style lang="less" scoped>
-@import "../static/style/common.less";
+@import "../../static/style/common.less";
 .page{
   padding: 0 20rpx;
 }

@@ -1,0 +1,98 @@
+<template>
+  <div class="page">
+    <calendar
+      :config="calendarConfig"
+    />
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  // import { setTodoLabels, clearTodoLabels } from '../../components/myCalendar/main.js';
+  wepy.page({
+   data:{
+     calendarConfig: {
+      multi: false, // 是否开启多选,
+      theme: 'elegant', // 日历主题，目前共两款可选择，默认 default 及 elegant，自定义主题在 theme 文件夹扩展
+      defaultDay: true, // 默认选中指定某天；当为 boolean 值 true 时则默认选中当天，非真值则在初始化时不自动选中日期，
+    }
+   },
+   methods:{
+       
+   },
+   async onLoad () {
+     console.log(this.$wx.selectComponent('#calendar'))
+    const calendar = this.$wx.selectComponent('#calendar').calendar
+    // calendar.jump({year:2018, month:6, date:6});
+   },
+  });
+</script>
+<style lang="less" scoped>
+@import "../../static/style/common.less";
+.hint{
+  padding: 0 30rpx 20rpx;
+  .item{
+    color:#666666;
+    font-size: 20rpx;
+    margin-right: 40rpx;
+    .circle{
+      display: inline-block;
+      width:10rpx;
+      height:10rpx;
+      background-color:red;
+      border-radius: 50%;
+      vertical-align: 4rpx;
+      margin-right: 10rpx;
+      &.s1{
+        background-color:#F1914A;
+      }
+      &.s2{
+        background-color:#3C8EB6;
+      }
+      &.s3{
+        background-color:red;
+      }
+    }
+  }
+}
+.tabs{
+  display: flex;
+  height:80rpx;
+  line-height: 80rpx;
+  border-top:1px solid #DCDCDC;
+  box-shadow: 1rpx 6rpx 13rpx 0rpx rgba(48, 48, 48, 0.08);
+  .item{
+    flex:1;
+    color:#999999;
+    text-align: center;
+    font-size: 28rpx;
+    &.on{
+      color: #3B8DB5;
+      border-bottom:5rpx solid #3B8DB5;
+    }
+  }
+}
+.list{
+  padding-top: 28rpx;
+}
+</style>
+<wxs module="m1" lang="babel">
+const getTime = (time) => {
+  let date = getDate(time);
+  let hour = date.getHours();
+  let mins = date.getMinutes();
+  let sec = date.getSeconds();
+  let milli = date.getMilliseconds();
+  return `${hour}:${mins}:${sec}.${milli}`;
+}
+module.exports.getTime = getTime;
+</wxs>
+<config>
+{
+    enablePullDownRefresh: true,
+    "usingComponents": {
+      "activity-item": "../../components/activityItem",
+      "my-calendar":"../../components/myCalendar",
+      "calendar":"../../components/calendar/index"
+    }
+}
+</config>

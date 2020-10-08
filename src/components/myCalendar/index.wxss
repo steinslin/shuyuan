@@ -1,0 +1,202 @@
+@import './iconfont//iconfont.wxss';
+
+.b {
+  display: flex;
+}
+
+.box-lr {
+  flex-direction: row;
+}
+
+.tb {
+  flex-direction: column;
+}
+
+.pc {
+  justify-content: center;
+}
+
+.ac {
+  align-items: center;
+}
+
+.cc {
+  align-items: center;
+  justify-content: center;
+}
+
+.day-top{
+  height: 50rpx;
+  width: 50rpx;
+  margin: 0 auto;
+  border-radius: 50%;
+  color: #3B8DB5;
+  background: rgba(59, 141, 181, 0.08);
+}
+
+.box-wrap {
+  flex-wrap: wrap;
+}
+
+.flex {
+  flex-grow: 1;
+}
+
+.bg {
+  background-image: linear-gradient(to bottom, #faefe7, #ffcbd7);
+  overflow: hidden;
+}
+
+.pink-color {
+  color: #000;
+}
+
+.white-color {
+  color: #fff;
+}
+
+.fs24 {
+  font-size: 24rpx;
+}
+
+.fs28 {
+  font-size: 28rpx;
+}
+
+.fs32 {
+  font-size: 32rpx;
+}
+
+.fs36 {
+  font-size: 36rpx;
+}
+
+.calendar {
+  width: 100%;
+  padding-bottom:10rpx;
+  box-sizing: border-box;
+}
+
+.top-handle {
+  height: 80rpx;
+  margin:0 30rpx 20rpx 30rpx;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.prev-handle,
+.next-handle {
+  padding: 20rpx;
+}
+
+.date-area {
+  height: 80rpx;
+  padding: 0 60rpx;
+}
+
+.weeks {
+  height: 50rpx;
+  line-height: 50rpx;
+  opacity: 0.5;
+}
+
+.week {
+  text-align: center;
+}
+
+.grid,
+.week {
+  width: 14.286014285714286%;
+  padding: 10rpx 0;
+}
+
+.day {
+  width: 60rpx;
+  height: 60rpx;
+  font-size: 28rpx;
+  font-weight: 200;
+}
+
+.normal-day-color {
+  color: #000;
+}
+
+.day-choosed-color {
+  color: #fff;
+}
+
+/* todo相关样式 */
+.todo-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background-color: #cc5226;
+}
+
+.todo-text {
+  font-size: 22rpx;
+  color: #c2c2c2;
+  position: absolute;
+}
+
+.todo-text-bottom {
+  position:absolute;
+  bottom: 6rpx;
+}
+
+.todo-text-top {
+  position:absolute;
+  top: 4rpx;
+}
+
+.dot-day-height {
+  height: 72rpx;
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+/* 不可选日期 */
+.disable-day-color {
+  color: #cacaca;
+}
+
+.disable-day-bg {
+  background-color: #f6f6f7;
+}
+
+/* 日期圆圈标记 */
+.day-circle {
+  border: 1rpx solid #88d2ac;
+  box-sizing: border-box;
+}
+
+.border-radius {
+  border-radius: 50%;
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+/* 日期选中 */
+.day-choosed-bg {
+  background-color: #4a86ee;
+  transition: all 0.3s;
+  animation-name: choosed;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes choosed {
+  from {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}

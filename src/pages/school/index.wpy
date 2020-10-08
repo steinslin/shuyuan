@@ -1,29 +1,170 @@
 <template>
   <div class="page">
-    <div class="tabs">
-      <div class="item on">预约访校</div>
-      <div class="item">活动报名</div>
+    <my-calendar :calendar="calendar"/>
+    <div class="hint">
+      <span class="item">
+        <span class="circle s2"></span>可报名或预约访校
+      </span>
+      <!-- <span class="item">
+        <span class="circle s2"></span>可预约访校
+      </span>
+      <span class="item">
+        <span class="circle s3"></span>可报名、预约访校
+      </span> -->
     </div>
-    <div class="list">
-      <activity-item btnText="立即预约"/>
+    <div class="tabs">
+      <div class="item" :class="{on:tabIndex==index}" v-for="(item, index) in tabs" :key="index" @click="tabChange(index)">{{item}}</div>
+    </div>
+    <div class="list" v-if="tabIndex == 0">
+      <activity-item v-for="(item, index) in activityList" v-if="item.isPast == -1" :key="index" :obj="item" btnText="立即预约" :border="true"/>
+    </div>
+    <div class="list" v-if="tabIndex == 1">
+      <activity-item v-for="(item, index) in activityList" v-if="item.isPast == 1" :key="index" :obj="item" btnText="立即报名" :border="true"/>
     </div>
   </div>
 </template>
 <script>
   import wepy from '@wepy/core'
+  import initCalendar from '../../components/myCalendar/main.js';
+  import { setTodoLabels, clearTodoLabels } from '../../components/myCalendar/main.js';
   wepy.page({
    data:{
+     calendar:{},
+     tabs:["预约访校","活动报名"],
+     tabIndex:0,
+     activityList:[]
    },
    methods:{
-   }
+     tabChange (index) {
+       this.tabIndex = index
+     },
+     renderCurMonthMark: async (_this, toMonth) => {
+      clearTodoLabels()
+      console.log(toMonth,"toMonth")
+      let res = await _this.$apis.activityInfoDateList({
+        date:toMonth,
+      })
+      if(res.code == 0){
+        let list = res.rows,
+        days = [],
+        days2 = []
+        list.forEach((item, index) => {
+          let year = _this.$dayjs(item.startTime).year(),
+          month = _this.$dayjs(item.startTime).month() + 1,
+          day = _this.$dayjs(item.startTime).date()
+          // if(item.isPast == -1){
+          //   days.push({
+          //     year,
+          //     month,
+          //     day
+          //   })
+          // }
+          // if(item.isPast == 1){
+          //   days2.push({
+          //     year,
+          //     month,
+          //     day
+          //   })
+          // }
+          days.push({
+            year,
+            month,
+            day
+          })
+        })
+        console.log(days, days2)
+        // 可预约、报名
+        // setTodoLabels({
+        //   pos:'bottom',
+        //   color:'#3C8EB6',
+        //   days,
+        // });
+        setTodoLabels({
+          pos: 'bottom', // 待办点标记位置 ['top', 'bottom']
+          showLabelAlways: true, // 点击时是否显示待办事项（圆点/文字），在 circle 为 true 及当日历配置 showLunar 为 true 时，此配置失效
+          days: [
+            {
+              year: 2020,
+              month: 10,
+              day: 1,
+              color: '#f40' // 单独定义代办颜色 (标记点、文字)
+            },
+            {
+              year: 2020,
+              month: 10,
+              day: 15,
+              color: '#000'
+            }
+          ]
+        })
+      }
+    },
+   },
+   async onLoad () {
+     initCalendar({
+      afterTapDay: async (selectedDate) => {
+        console.log(selectedDate,"selectedDate")
+        let activityList = await this.$apis.activityInfoList({
+          //  activityType: this.navList[this.tabIndex].navType
+          startTime:`${selectedDate.year}-${selectedDate.month}-${selectedDate.day}`
+        })
+        this.activityList = activityList.rows
+      },
+      afterCalendarRender: async () => {
+        this.renderCurMonthMark(this, this.$dayjs().format("YYYY-MM-01"))
+      },
+      whenChangeMonth: async (beforeDate, curDate) => {
+        console.log(curDate)
+        this.renderCurMonthMark(this, `${curDate.year}-${curDate.month}-01`)
+      }
+    });
+    let activityList = await this.$apis.activityInfoList({
+      //  activityType: this.navList[this.tabIndex].navType
+      startTime:this.$dayjs().format("YYYY-MM-DD")
+    })
+    this.activityList = activityList.rows
+   },
+   async onPullDownRefresh () {
+     this.$wx.onLoad()
+     this.renderCurMonthMark(this, this.$dayjs().format("YYYY-MM-01"))
+     wx.stopPullDownRefresh()
+   },
   });
 </script>
 <style lang="less" scoped>
 @import "../../static/style/common.less";
+.hint{
+  padding: 0 30rpx 20rpx;
+  .item{
+    color:#666666;
+    font-size: 20rpx;
+    margin-right: 40rpx;
+    .circle{
+      display: inline-block;
+      width:10rpx;
+      height:10rpx;
+      background-color:red;
+      border-radius: 50%;
+      vertical-align: 4rpx;
+      margin-right: 10rpx;
+      &.s1{
+        background-color:#F1914A;
+      }
+      &.s2{
+        background-color:#3C8EB6;
+      }
+      &.s3{
+        background-color:red;
+      }
+    }
+  }
+}
 .tabs{
   display: flex;
   height:80rpx;
   line-height: 80rpx;
+  border-top:1px solid #DCDCDC;
+  box-shadow: 1rpx 6rpx 13rpx 0rpx rgba(48, 48, 48, 0.08);
   .item{
     flex:1;
     color:#999999;
@@ -52,8 +193,10 @@ module.exports.getTime = getTime;
 </wxs>
 <config>
 {
+    enablePullDownRefresh: true,
     "usingComponents": {
-      "activity-item": "../../components/activityItem"
+      "activity-item": "../../components/activityItem",
+      "my-calendar":"../../components/myCalendar"
     }
 }
 </config>

@@ -7,14 +7,14 @@
     <div class="container">
       <navigator url="/pages/notice" class="notice" hover-class="none">
         <image class="icon" src="../static/images/notice.png"/>
-        <span class="text">万科梅沙书院预约活动小程序正式上线啦...</span>
+        <span class="text">{{noticeList.length>0?noticeList[0].noticeTitle:"暂无公告"}}</span>
         <image class="arrow-right" src="../static/images/arrow-right.png"/>
       </navigator>
       <div class="text-wrap">
-        <div class="title">活动现场</div>
+        <div class="title">{{actPhotoName}}</div>
         <div class="content">
-          <image class="activity-img" :src="item" v-for="(item, index) in actPhotoList" :key="index"/>
-          <image class="activity-img more"/>
+          <image class="activity-img" v-if="index <= 13" :src="item" v-for="(item, index) in actPhotoList" :key="index" @click="previewImage(item)"/>
+          <image class="activity-img more" @click="showMore"/>
         </div>
       </div>
       <div class="text-wrap">
@@ -32,20 +32,42 @@
   wepy.page({
    data:{
      bannerList:[],
+     actPhotoName:"",
      actPhotoList:[],
+     noticeList:[],
      detail:""
    },
    methods:{
+     previewImage (item) {
+       wx.previewImage({
+        current: item, // 当前显示图片的http链接
+        urls: this.actPhotoList // 需要预览的图片http链接列表
+      })
+     },
+     showMore () {
+       wx.navigateTo({
+         url:"/pages/activity/picture"
+       })
+     }
    },
    async onLoad () {
      let banner = await this.$apis.banner({})
      this.bannerList = banner.rows
      let actPhotoList= await this.$apis.actPhotoList({})
+     try{
+     this.actPhotoName = actPhotoList.rows[0].actName
      this.actPhotoList = actPhotoList.rows[0].imgs.split(",")
+     }catch(err){}
+     let noticeList = await this.$apis.noticeList({})
+     this.noticeList = noticeList.rows
      let info = await this.$apis.agreementView({type:1})
      this.detail = info.agreement.context?info.agreement.context:"暂无数据"
      WxParse.wxParse('article', 'html', this.detail, this.$wx, 20)
-   }
+   },
+    async onPullDownRefresh () {
+     this.$wx.onLoad()
+     wx.stopPullDownRefresh()
+   },
   });
 </script>
 <style lang="less" scoped>
@@ -77,6 +99,8 @@
   .arrow-right{
     width:26rpx;
     height:26rpx;
+    margin-left: auto;
+    margin-right: 20rpx;
     border-radius: 50%;
     flex-shrink: 0;
   }
@@ -132,6 +156,7 @@ module.exports.getTime = getTime;
 </wxs>
 <config>
 {
+    enablePullDownRefresh: true,
     "usingComponents": {
       "banner":"../components/banner"
     }

@@ -1,24 +1,27 @@
 <template>
-  <div class="activity-item" @click="detail">
-    <img class="img no-img"/>
+  <div class="activity-item" @click="detail" :class="{border:border}">
+    <img class="img no-img" :src="obj.activityImg"/>
     <div class="info">
-      <div class="title">未来领袖第一期报名活动未来领袖第一期报名活动</div>
-      <div class="desc">永远不要低估文字的力量。它可以构建或摧毁现实，赋予或抚平永远不要低估文字的力量。它可以构建或摧毁现实，赋予或抚平</div>
-      <div class="time"><image mode="widthFix" class="icon" src="../static/images/time.png"/>2020/09/30</div>
-      <div class="btn fr">{{btnText}}</div>
+      <div class="title">{{obj.activityTitle}}</div>
+      <div class="desc">{{obj.introduce}}</div>
+      <div class="time"><image mode="widthFix" class="icon" src="../static/images/time.png"/>{{obj.startTime}}</div>
+      <div class="btn">{{btnText}}</div>
     </div>
   </div>
 </template>
 <script>
 import wepy from '@wepy/core'
 wepy.component({
-  props:["btnText"],
+  props:["obj","border","btnText"],
   methods:{
     detail () {
       wx.navigateTo({
-        url:"/pages/activity/detail"
+        url:`/pages/activity/detail?activityid=${this.obj.activityId}&ispast=${this.obj.isPast}`
       })
     }
+  },
+  ready () {
+
   }
 })
 </script>
@@ -30,12 +33,17 @@ wepy.component({
   height:282rpx;
   margin:0 auto 22rpx;
   background-color:#fff;
+  &.border{
+    border-bottom:1px solid #d6d6d6;
+    padding-bottom: 28rpx;
+  }
   .img{
     width:230rpx;
     height:282rpx;
     flex-shrink: 0;
   }
   .info{
+    position: relative;
     padding: 26rpx;
     .title{
       color:#343434;
@@ -46,7 +54,7 @@ wepy.component({
     }
     .desc{
       width:396rpx;
-      height:74rpx;
+      // height:74rpx;
       line-height: 37rpx;
       padding: 0 10rpx;
       color:#3C8EB6;
@@ -67,7 +75,9 @@ wepy.component({
       }
     }
     .btn{
-      display: inline-block;
+      position:absolute;
+      right:20rpx;
+      bottom:20rpx;
       color:#fff;
       font-size: 24rpx;
       padding: 6rpx 18rpx;

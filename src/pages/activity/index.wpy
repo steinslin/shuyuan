@@ -1,15 +1,11 @@
 <template>
   <div class="page">
     <van-tabs :active="tabIndex" @change="tabChange" color="#3C8DB5">
-      <van-tab title="未来领袖"></van-tab>
-      <van-tab title="开放日"></van-tab>
-      <van-tab title="ECHO"></van-tab>
+      <van-tab :title="item.navName" v-for="(item, index) in navList" :key="index"></van-tab>
     </van-tabs>
-    <div class="banner">
-      <banner :list="bannerList" height="288"/>
-    </div>
-    <div class="list">
-      <activity-item btnText="立即报名"/>
+    <image class="banner" :src="navList[tabIndex].navImg" @click="detail"/>
+    <div class="list" v-if="activityList.length > 0">
+      <activity-item v-for="(item, index) in activityList" :key="index" :obj="item" btnText="立即报名"/>
     </div>
   </div>
 </template>
@@ -18,17 +14,40 @@
   wepy.page({
    data:{
      tabIndex:0,
-     bannerList:[]
+     bannerList:[],
+     navList:[],
+     activityList:[]
    },
    methods:{
-     tabChange (e) {
-       
+     async tabChange (e) {
+       this.tabIndex = e.$wx.detail.index
+       console.log(this.navList[this.tabIndex])
+       let activityList = await this.$apis.activityInfoList({
+        activityType: this.navList[this.tabIndex].id
+       })
+       this.activityList = activityList.rows
+     },
+     detail () {
+       wx.navigateTo({
+         url:`/pages/activity/modelDetail?id=${this.navList[this.tabIndex].id}`
+       })
      }
    },
    async onLoad () {
      let banner = await this.$apis.banner({})
      this.bannerList = banner.rows
-   }
+     let navList = await this.$apis.navigaInfoList({})
+     this.navList = navList
+    //  let navigaInfoSel = await this.$apis.navigaInfoSel(28)
+     let activityList = await this.$apis.activityInfoList({
+       activityType: this.navList[this.tabIndex].id
+     })
+     this.activityList = activityList.rows
+   },
+   async onPullDownRefresh () {
+     this.$wx.onLoad()
+     wx.stopPullDownRefresh()
+   },
   });
 </script>
 <style lang="less" scoped>
@@ -38,6 +57,7 @@
   height:288rpx;
   margin:30rpx auto 48rpx;
   border-radius: 12rpx;
+  transform: translateZ(0);
   overflow: hidden;
 }
 .list{
@@ -58,6 +78,7 @@ module.exports.getTime = getTime;
 </wxs>
 <config>
 {
+    enablePullDownRefresh: true,
     "usingComponents": {
       "van-tab": "module:@vant/weapp/dist/tab/index",
       "van-tabs": "module:@vant/weapp/dist/tabs/index",

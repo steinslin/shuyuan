@@ -8,33 +8,48 @@
       <div class="form">
         <div class="item">
           <div class="label">联系人</div>
-          <div class="text">YUAN</div>
+          <div class="text">{{param.userNike}}</div>
         </div>
         <div class="item">
           <div class="label">联系电话</div>
-          <div class="text">1517443359</div>
+          <div class="text">{{param.phonenumber}}</div>
         </div>
         <div class="item">
           <div class="label">报名人数</div>
-          <div class="text">4人</div>
+          <div class="text">{{param.number}}人</div>
         </div>
         <div class="item">
           <div class="label">年级</div>
-          <div class="text">高一</div>
+          <div class="text">{{param.grade}}</div>
         </div>
         <div class="item">
           <div class="label">活动日期</div>
-          <div class="text">2020/11/23</div>
+          <div class="text">{{orderInfo.time}}</div>
         </div>
       </div>
     </div>
-    <div class="btn">完成</div>
+    <div class="btn" @click="sure">完成</div>
   </div>
 </template>
 <script>
   import wepy from '@wepy/core'
   wepy.page({
-   
+   data:{
+     param:{},
+     orderInfo:""
+   },
+   async onLoad (param) {
+      let orderInfo = await this.$apis.getCodeInfo(param.orderid)
+      this.orderInfo = orderInfo
+      this.param = param
+   },
+   methods:{
+     sure () {
+      //  wx.redirectTo({
+      //    url:"/pages/my/index"
+      //  })
+     }
+   }
   });
 </script>
 <style lang="less" scoped>
@@ -69,10 +84,10 @@ page{
     margin-bottom: 100rpx;
   }
   .form{
-    margin-left:49rpx;
+    margin-left:30rpx;
     .item{
       display: flex;
-      font-size: 30rpx;
+      font-size: 28rpx;
       margin-bottom: 52rpx;
       color:#999999;
       .label{

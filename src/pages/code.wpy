@@ -1,0 +1,163 @@
+<template>
+  <div class="page">
+    <template v-if="signInfo">
+      <div class="card">
+        <div class="title">预约成功！</div>
+        <div class="hint">温馨提示：预约成功，记得在规定时间内使用哦！</div>
+        <image mode="widthFix" class="dot" src="../static/images/dot.png"/>
+        <image mode="widthFix" class="success" src="../static/images/success.png"/>
+        <div class="form">
+            <div class="item">
+            <div class="label">联系人</div>
+            <div class="text">{{signInfo.userNike}}</div>
+            </div>
+            <div class="item">
+            <div class="label">联系电话</div>
+            <div class="text">{{signInfo.phonenumber}}</div>
+            </div>
+            <div class="item">
+            <div class="label">访校人数</div>
+            <div class="text">{{signInfo.number}}人</div>
+            </div>
+            <div class="item">
+            <div class="label">年级</div>
+            <div class="text">{{signInfo.grade}}</div>
+            </div>
+            <div class="item">
+            <div class="label">访校日期</div>
+            <div class="text">{{signInfo.activityTime}}</div>
+            </div>
+        </div>
+        </div>
+        <div class="btn" @click="sure">签到</div>
+    </template>
+    <template v-else>
+        <div class="hint">无签到信息！</div>
+    </template>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  wepy.page({
+   data:{
+     param:{},
+     signInfo:""
+   },
+   async onLoad (param) {
+      this.param = param
+      let signInfo = await this.$apis.activitySignSel({
+        activityId: this.param.activityid
+      })
+      if(signInfo.rows.length == 0){
+        // this.$showToast("无签到信息")
+        // wx.redirectTo({
+        //   url:`/pages/activity/detail?activityid=${this.param.activityid}`
+        // })
+      }else{
+        this.signInfo = signInfo.rows[0]
+      }
+    //   let orderInfo = await this.$apis.getCodeInfo(param.orderid)
+    //   this.orderInfo = orderInfo
+    //   this.param = param
+   },
+   methods:{
+     async sure () {
+       let activitySign = await this.$apis.activitySign({
+         activityId: this.param.activityid
+       })
+       this.$showToast(activitySign.msg)
+      //  wx.redirectTo({
+      //    url:"/pages/my/index"
+      //  })
+     }
+   }
+  });
+</script>
+<style lang="less" scoped>
+@import "../static/style/common.less";
+page{
+  background-color:#3B8DB5;
+}
+.card{
+  position: relative;
+  width:690rpx;
+  height:832rpx;
+  margin:68rpx auto 86rpx;
+  padding-top: 70rpx;
+  background-color:#fff;
+  border-radius: 14rpx;
+  .title{
+    color:#3B8DB5;
+    font-size: 42rpx;
+    margin-bottom: 24rpx;
+    text-align: center;
+    letter-spacing: 10rpx;
+    font-weight: bold;
+  }
+  .hint{
+    color:#999999;
+    font-size: 24rpx;
+    text-align: center;
+    margin-bottom: 70rpx;
+  }
+  .dot{
+    width:100%;
+    margin-bottom: 100rpx;
+  }
+  .form{
+    margin-left:30rpx;
+    .item{
+      display: flex;
+      font-size: 28rpx;
+      margin-bottom: 52rpx;
+      color:#999999;
+      .label{
+        flex:1;
+      }
+      .text{
+        flex: 3;
+      }
+    }
+  }
+  .success{
+    position: absolute;
+    right:30rpx;
+    bottom:54rpx;
+    width:190rpx;
+  }
+}
+.hint{
+    text-align: center;
+    color:#fff;
+    padding: 20rpx 0;
+}
+.btn{
+  width: 694rpx;
+  height: 98rpx;
+  text-align: center;
+  line-height: 98rpx;
+  margin: 0 auto;
+  background: #FFFFFF;
+  color:#3B8DB5;
+  border-radius: 49rpx;
+}
+</style>
+<wxs module="m1" lang="babel">
+const getTime = (time) => {
+  let date = getDate(time);
+  let hour = date.getHours();
+  let mins = date.getMinutes();
+  let sec = date.getSeconds();
+  let milli = date.getMilliseconds();
+  return `${hour}:${mins}:${sec}.${milli}`;
+}
+module.exports.getTime = getTime;
+</wxs>
+<config>
+{
+    "navigationBarTitleText":"签到信息",
+    "usingComponents": {
+      
+    }
+}
+</config>

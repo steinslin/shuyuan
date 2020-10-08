@@ -2,25 +2,16 @@
   <div class="page">
     <van-tabs :active="tabIndex" @change="tabChange" color="#3C8DB5">
       <van-tab title="全部">
-        <activityOrderItem/>
-        <activityOrderItem/>
-        <activityOrderItem/>
-        <activityOrderItem/>
+        <activity-order-item :obj="item" v-for="(item, index) in orderList" :key="index"/>
       </van-tab>
       <van-tab title="已预约">
-        <activityOrderItem/>
-        <activityOrderItem/>
-        <activityOrderItem/>
+        <activity-order-item :obj="item" v-if="item.orderStatus == 0" v-for="(item, index) in orderList" :key="index"/>
       </van-tab>
       <van-tab title="已结束">
-        <activityOrderItem/>
-        <activityOrderItem/>
-        <activityOrderItem/>
+        <activity-order-item :obj="item" v-if="item.orderStatus == 3" v-for="(item, index) in orderList" :key="index"/>
       </van-tab>
       <van-tab title="已取消">
-        <activityOrderItem/>
-        <activityOrderItem/>
-        <activityOrderItem/>
+        <activity-order-item :obj="item" v-if="item.orderStatus == -1" v-for="(item, index) in orderList" :key="index"/>
       </van-tab>
     </van-tabs>
   </div>
@@ -29,13 +20,22 @@
   import wepy from '@wepy/core'
   wepy.page({
    data:{
-     tabIndex:0
+     tabIndex:0,
+     orderList:[]
    },
    methods:{
      tabChange (e) {
        console.log(e)
      }
-   }
+   },
+   async onLoad () {
+     let orderList = await this.$apis.orderList({orderType:-1})
+     this.orderList = orderList.rows
+   },
+   async onPullDownRefresh () {
+     this.$wx.onLoad()
+     wx.stopPullDownRefresh()
+   },
   });
 </script>
 <style lang="less" scoped>
@@ -57,10 +57,11 @@ module.exports.getTime = getTime;
 </wxs>
 <config>
 {
+    enablePullDownRefresh: true,
     "usingComponents": {
       "van-tab": "module:@vant/weapp/dist/tab/index",
       "van-tabs": "module:@vant/weapp/dist/tabs/index",
-      "activityOrderItem": "../../components/activityOrderItem"
+      "activity-order-item": "../../components/activityOrderItem"
     }
 }
 </config>

@@ -1,32 +1,60 @@
 <template>
   <div class="activity-order-item">
     <div class="head">
-      <div class="order-num">订单编号：1920903</div>
-      <div class="status s3">已取消</div>
+      <div class="order-num">订单编号：{{obj.orderNo}}</div>
+      <div class="status s2" v-if="obj.orderStatus == 0">{{obj.orderType==1?"已报名":"已预约"}}</div>
+      <div class="status s1" v-if="obj.orderStatus == 3">已结束</div>
+      <div class="status s3" v-if="obj.orderStatus == -1">已取消</div>
     </div>
     <div class="main">
-      <image class="img no-img"/>
+      <image class="img no-img" :src="obj.activityImg"/>
       <div class="info">
-        <div class="title">未来领袖第一期报名报名报名报名</div>
-        <div class="desc">永远不要低估文字的力量。它可以构建或摧毁现实，赋予或抚赋予或抚</div>
-        <div class="txt">访校日期：2020/09/30</div>
-        <div class="txt">访校人数：2人</div>
+        <div class="title">{{obj.activityTitle}}</div>
+        <div class="desc">{{obj.introduce}}</div>
+        <div class="txt">访校日期：{{obj.activityTime}}</div>
+        <div class="txt">访校人数：{{obj.number}}人</div>
       </div>
     </div>
     <div class="foot">
-      <div class="btn">问卷调查</div>
-      <div class="btn s2">查看详情</div>
+      <div class="btn" @click="question">问卷调查</div>
+      <div class="btn s2" @click="detail">查看详情</div>
     </div>
   </div>
 </template>
 <script>
   import wepy from '@wepy/core'
   wepy.component({
+   props:["obj"],
    methods:{
      tabChange (e) {
        console.log(e)
+     },
+     async question () {
+       let feedBackSel = await this.$apis.feedBackSel({
+         orderId:this.obj.orderId
+       })
+       console.log(feedBackSel)
+       if(!feedBackSel.feedBack){
+          wx.navigateTo({
+           url:`/pages/my/question?orderid=${this.obj.orderId}`
+         })
+       }else{
+         this.$showToast("您已提交了问卷")
+       }
+     },
+     async detail () {
+       if(this.obj.orderType == -1){
+        wx.navigateTo({
+          url:`/pages/appointSuccess?orderid=${this.obj.orderId}&userNike=${this.obj.userNike}&phonenumber=${this.obj.phonenumber}&number=${this.obj.number}&grade=${this.obj.grade}&activityTime=${this.obj.activityTime}`
+        })
+       }
+       if(this.obj.orderType == 1){
+        wx.navigateTo({
+          url:`/pages/signUpSuccess?orderid=${this.obj.orderId}&userNike=${this.obj.userNike}&phonenumber=${this.obj.phonenumber}&number=${this.obj.number}&grade=${this.obj.grade}&activityTime=${this.obj.activityTime}`
+        })
+       }
      }
-   }
+   },
   });
 </script>
 <style lang="less" scoped>
@@ -47,7 +75,7 @@ page{
     height:68rpx;
     border-bottom: 1px solid #EDEFF2;
     .order-num{
-      flex:1;
+      flex:4;
       color:#9A9A9A;
     }
     .status{

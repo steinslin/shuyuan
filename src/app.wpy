@@ -3,6 +3,7 @@ import wepy from '@wepy/core';
 
 // import Api from "./static/js/base";
 import apis from "./static/js/apis"
+import dayjs from 'dayjs'
 import utils_baby from "./static/js/utils_baby"
 
 
@@ -22,7 +23,14 @@ wepy.app({
 
   async onLaunch() {
     this.__proto__.__proto__.$apis = apis;
-   
+    this.__proto__.__proto__.$dayjs = dayjs;
+    this.__proto__.__proto__.$showToast = (title, duration = 2000) => {
+      wx.showToast({
+        title,
+        icon: 'none',
+        duration
+      })
+    }
   },
   onPageScroll(e){
     console.log(e)
@@ -38,17 +46,21 @@ wepy.app({
       "pages/index",
       "pages/notice",
       "pages/detail",
-      "pages/question",
+      "pages/my/question",
+      "pages/code",
       "pages/appointSuccess",
       "pages/signUpSuccess",
       "pages/school/index",
+      "pages/school/index2",
       "pages/activity/index",
       "pages/activity/detail",
       "pages/activity/picture",
       "pages/activity/appointment",
+      "pages/activity/modelDetail",
       "pages/my/index",
       "pages/my/activityOrderList",
-      "pages/my/schoolOrderList"
+      "pages/my/schoolOrderList",
+      "pages/my/aboutUs"
     ],
     window: {
       "navigationBarTitleText":"深圳市万科城梅沙书院",

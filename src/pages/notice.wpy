@@ -14,7 +14,11 @@
    async onLoad () {
      let noticeList = await this.$apis.noticeList({})
      this.noticeList = noticeList.rows
-   }
+   },
+   async onPullDownRefresh () {
+     this.$wx.onLoad()
+     wx.stopPullDownRefresh()
+   },
   });
 </script>
 <style lang="less" scoped>
@@ -36,6 +40,7 @@ module.exports.getTime = getTime;
 </wxs>
 <config>
 {
+    enablePullDownRefresh: true,
     "navigationBarTitleText":"公告",
     "usingComponents": {
       "notice-item":"../components/noticeItem"

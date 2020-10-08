@@ -1,26 +1,10 @@
 <template>
   <div class="page">
     <div class="container">
-      <div class="text-wrap">
-        <div class="title">活动现场</div>
+      <div class="text-wrap" v-for="(item, index) in actPhotoList" :key="index">
+        <div class="title">{{item.actName}}</div>
         <div class="content">
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-        </div>
-      </div>
-      <div class="text-wrap">
-        <div class="title">开放日活动</div>
-        <div class="content">
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
-          <image class="activity-img"/>
+          <image class="activity-img" :src="itm" v-for="(itm, idx) in item.imgs" :key="idx" @click="previewImage(itm, item.imgs)"/>
         </div>
       </div>
     </div>
@@ -30,8 +14,24 @@
   import wepy from '@wepy/core'
   wepy.page({
    data:{
+     actPhotoList:[]
    },
    methods:{
+     previewImage (item, urls) {
+       console.log(urls)
+       wx.previewImage({
+        current: item, // 当前显示图片的http链接
+        urls // 需要预览的图片http链接列表
+      })
+     },
+   },
+   async onLoad () {
+     let actPhotoList= await this.$apis.actPhotoList({})
+     this.actPhotoList = actPhotoList.rows
+     this.actPhotoList = this.actPhotoList.map((item, index) => {
+        item.imgs = item.imgs.split(",")
+        return item
+     })
    }
   });
 </script>

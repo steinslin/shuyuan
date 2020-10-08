@@ -12,16 +12,15 @@
       <span>联系我们</span>
       <image class="icon" mode="widthFix" src="../../static/images/wechat.png" @click="wachatShow=true"/>
       <image class="icon" mode="widthFix" src="../../static/images/phone.png" @click="makePhone"/>
-      <div class="btn fr" @click="signUp">{{param.ispast==1?"立即报名":"立即预约"}}</div>
+      <div class="btn fr" @click="signUp">立即预约</div>
     </div>
     <div class="text-content">
-      <wx-template is="wxParse" data="{{wxParseData:article2.nodes}}"/>
+      <wx-template is="wxParse" data="{{wxParseData:article.nodes}}"/>
     </div>
     <div class="dialog" v-if="wachatShow">
       <div class="content">
-        <wx-template is="wxParse" data="{{wxParseData:article.nodes}}"/>
         <!-- <image mode="aspectFill" class="title" src="../../static/images/contact_us.png"/> -->
-        <!-- <image class="qr-code"/>
+        <image class="qr-code"/>
         <div class="main">
           <div class="hint">扫描二维码添加微信</div>
           <div class="wechat">微信号：TYEXSERS</div>
@@ -29,8 +28,7 @@
           <div class="foot">
             <div class="btn" @click="wachatShow = false">我知道了</div>
           </div>
-        </div> -->
-        <div class="btn" @click="wachatShow = false">我知道了</div>
+        </div>
       </div>
     </div>
   </div>
@@ -49,7 +47,7 @@ wepy.page({
   methods:{
     makePhone () {
       wx.makePhoneCall({
-        phoneNumber: this.phone.context //仅为示例，并非真实的电话号码
+        phoneNumber: '1340000' //仅为示例，并非真实的电话号码
       })
     },
     signUp () {
@@ -59,14 +57,12 @@ wepy.page({
     }
   },
   async onLoad (param) {
-    this.phone = (await this.$apis.agreementView({type:2})).agreement
-    this.wechat = (await this.$apis.agreementView({type:3})).agreement
-    WxParse.wxParse('article', 'html', this.wechat.context, this.$wx, 20)
+    this.phone = await this.$apis.agreementView({type:2}).agreement
+    this.wechat = await this.$apis.agreementView({type:3}).agreement
     let detail = await this.$apis.activityInfoSel(param.activityid)
-    console.log(param)
     this.param = param
     this.detail = detail.activityInfo
-    WxParse.wxParse('article2', 'html', this.detail.activityDesc, this.$wx, 20)
+    WxParse.wxParse('article', 'html', this.detail.activityDesc, this.$wx, 20)
   }
 })
 </script>
@@ -112,7 +108,6 @@ wepy.page({
   display: flex;
   align-items: center;
   padding: 26rpx 0 48rpx;
-  width: 100%;
   color:#3B8DB5;
   font-size: 26rpx;
   border-bottom:1px solid #DCDCDC;
@@ -146,22 +141,9 @@ wepy.page({
     left:50%;
     transform:translate(-50%, -50%);
     width:580rpx;
+    height:800rpx;
     background-color:#fff;
     border-radius: 10rpx;
-    image{
-      width: 100% !important;
-    }
-    .btn{
-      width:326rpx;
-      height:54rpx;
-      margin: 26rpx auto;
-      font-size: 28rpx;
-      color:#fff;
-      text-align: center;
-      line-height: 54rpx;
-      background-color:#3B8DB5;
-      border-radius: 28rpx;
-    }
     .title{
       width:580rpx;
       height:246rpx;
@@ -194,6 +176,17 @@ wepy.page({
     }
     .foot{
       border-top:1px solid #F7F7F7;
+      .btn{
+        width:326rpx;
+        height:54rpx;
+        margin: 26rpx auto;
+        font-size: 28rpx;
+        color:#fff;
+        text-align: center;
+        line-height: 54rpx;
+        background-color:#3B8DB5;
+        border-radius: 28rpx;
+      }
     }
   }
 }

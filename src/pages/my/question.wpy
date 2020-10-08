@@ -1,55 +1,76 @@
 <template>
   <div class="page">
-    <image class="show" mode="widthFix" src="../static/images/question.png"/>
-    <div class="panel">
-      <div class="head">
-        <span class="title">1. 您对万科梅沙书院的满意程度</span>
-        <span class="status fr">单选</span>
-      </div>
-      <div class="content">
-        <div class="check-wrap">
-          <div class="item">
-            <div class="circle on"></div>
-            <div class="text">十分满意</div>
-          </div>
-          <div class="item">
-            <div class="circle on"></div>
-            <div class="text">满意</div>
-          </div>
-          <div class="item">
-            <div class="circle on"></div>
-            <div class="text">一般</div>
-          </div>
-          <div class="item">
-            <div class="circle on"></div>
-            <div class="text">不满意</div>
+    <image class="show" mode="widthFix" src="../../static/images/question.png"/>
+    <div class="panel" v-for="(item, index) in question" :key="index">
+      <template v-if="item.type == 'radio'">
+        <div class="head">
+          <span class="title">{{item.title}}</span>
+          <!-- <span class="status fr">{{item.type=="radio"}}</span> -->
+        </div>
+        <div class="content">
+          <div class="check-wrap" v-for="(itm, idx) in item.list" :key="idx">
+            <div class="item" @click="radioCheck(index, idx)">
+              <div class="circle" :class="{on:item.index == idx}"></div>
+              <div class="text">{{itm}}</div>
+            </div>
           </div>
         </div>
-      </div>
+      </template>
+      <template v-if="item.type == 'textarea'">
+        <div class="head">
+          <span class="title">{{item.title}}</span>
+          <!-- <span class="status fr">单选</span> -->
+        </div>
+        <div class="content">
+          <textarea class="advice" :value="item.value" placeholder="请写下你想对万科梅沙书院说的建议"/>
+        </div>
+      </template>
     </div>
-    <div class="panel">
-      <div class="head">
-        <span class="title">2. 您对万科梅沙书院有什么建议</span>
-        <!-- <span class="status fr">单选</span> -->
-      </div>
-      <div class="content">
-        <textarea class="advice" :value="advice" placeholder="请写下你想对万科梅沙书院说的建议"/>
-      </div>
-    </div>
-    <div class="submit">提交问卷</div>
+    <div class="submit" @click="submit">提交问卷</div>
   </div>
 </template>
 <script>
   import wepy from '@wepy/core'
   wepy.page({
    data:{
+     param:{},
+     question:[{
+       type:"radio",
+       title:"1. 您对万科梅沙书院的满意程度",
+       list:["十分满意","满意","一般","不满意"],
+       index:0
+     },{
+       type:"textarea",
+       title:"2. 您对万科梅沙书院有什么建议",
+       value:""
+     }]
    },
    methods:{
+     radioCheck (index, idx) {
+       this.question[index].index = idx
+     },
+     async submit () {
+       let feedBackAdd = await this.$apis.feedBackAdd({
+         feedBack: JSON.stringify(this.question),
+         orderId: this.param.orderid
+       })
+       if(feedBackAdd.code == 0){
+         setTimeout(() => {
+          this.$showToast("提交成功")
+          wx.navigateBack()
+         },2000)
+       }else{
+         this.$showToast(feedBackAdd.msg)
+       }
+     }
+   },
+   onLoad (param) {
+     this.param = param
    }
   });
 </script>
 <style lang="less" scoped>
-@import "../static/style/common.less";
+@import "../../static/style/common.less";
 page{
   background-color:#F8F8F8;
 }

@@ -19,14 +19,14 @@ export default class Api {
         this[key] = obj[key]
     }
     //传入参数
-    console.log(this);
+    // console.log(this);
   }
   //基础请求方法,返回请求到的数据
   async ajax() {
     let token = wx.getStorageSync('token') || await this.getToken()
     wx.setStorageSync('token', token);
-    console.log("本次的请求链接", this.baseUrl + this.url) 
-    console.log(token) 
+    // console.log("本次的请求链接", this.baseUrl + this.url) 
+    // console.log(token) 
     
     let result = await new Promise((resolve, reject) => {
       wx.request({
@@ -37,16 +37,19 @@ export default class Api {
           'Cookie':'JSESSIONID='+token
         },
         method: this.method.toUpperCase(),
-        success(res) {
-          if(res && res.statusCode == 200){
-            if (res.data.code == 4000) {
-              console.log("登录失败")
-              wx.navigateTo({
-                url:'/pages/login'
-              })
-            }
+        success: async (res) => {
+          if(res && typeof res.data !== "string"){
+            console.log("请求成功")
             resolve(res)
           }else{
+            console.log("请求失败",await this.getToken())
+            wx.showToast({
+              title: '登录失败',
+              icon: 'none',
+              duration: 2000
+            })
+            token = await this.getToken()
+            wx.setStorageSync('token', token);
             reject("请求错误",res)
           }
         },
@@ -102,6 +105,7 @@ export default class Api {
             method : "POST",
             success(res){
               let token = res.data.sessionid;
+              console.log("getToken",res)
               resolve(token)
             },
             fail(err){reject("微信请求失败:",err)},
@@ -247,34 +251,33 @@ export default class Api {
 //   })
 // }
 
-// /**
-//  * @description: 微信支付
-//  * @param {Object} param 参数对象
-//  * @param {String} type 下单类型
-//  * @return: 
-//  */
-// const wxPay = async (param, type) => {
-//   console.log(param)
-//   const prepay_id = await wxRequest(`${baseUrl}/weixinpay/Xiadan${type}`,param,"POST","")
-//   const res = await wxRequest(`${baseUrl}/weixinpay/Sign`,prepay_id,"POST","")
-//   return new Promise((resolve,reject) => {
-//     wx.requestPayment({
-//       timeStamp: res.timeStamp,
-//       nonceStr: res.nonceStr,
-//       package: res.package,
-//       signType: res.signType,
-//       paySign: res.paySign,
-//       success(res) {
-//         if(res.errMsg.indexOf('ok') !== -1){
-//           resolve()
-//         }
-//       },
-//       fail(err){
-//         reject(err)
-//       }
-//     })
-//   })
-// }
+/**
+ * @description: 微信支付
+ * @param {Object} param 参数对象
+ * @param {String} type 下单类型
+ * @return: 
+ */
+const wxPay = async (param, type) => {
+  const prepay_id = await wxRequest(`${baseUrl}/weixinpay/Xiadan${type}`,param,"POST","")
+  const res = await wxRequest(`${baseUrl}/weixinpay/Sign`,prepay_id,"POST","")
+  return new Promise((resolve, reject) => {
+    wx.requestPayment({
+      timeStamp: res.timeStamp,
+      nonceStr: res.nonceStr,
+      package: res.package,
+      signType: res.signType,
+      paySign: res.paySign,
+      success(res) {
+        if(res.errMsg.indexOf('ok') !== -1){
+          resolve()
+        }
+      },
+      fail(err){
+        reject(err)
+      }
+    })
+  })
+}
 
 // const uploadImg = (message) => {
 //   return new Promise((resolve, reject)=>{

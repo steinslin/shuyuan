@@ -4,7 +4,7 @@
       <image mode="widthFix" src="../static/images/voice.png" class="icon"/>
       <span>{{obj.noticeTitle}}</span>
     </div>
-    <div class="desc">{{obj.noticeContent}}</div>
+    <div class="desc">{{obj.noticeIntro}}</div>
     <div class="foot">
       <span class="text">查看详情</span>
       <image class="arrow-right" mode="widthFix" src="../static/images/arrow-right2.png"/>
