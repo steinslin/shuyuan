@@ -45,9 +45,7 @@
    },
    methods:{
      sure () {
-      //  wx.redirectTo({
-      //    url:"/pages/my/index"
-      //  })
+      wx.navigateBack()
      }
    }
   });
@@ -100,7 +98,7 @@ page{
   }
   .success{
     position: absolute;
-    right:30rpx;
+    right:16rpx;
     bottom:54rpx;
     width:190rpx;
   }

@@ -5,7 +5,7 @@
       <div class="title">{{obj.activityTitle}}</div>
       <div class="desc">{{obj.introduce}}</div>
       <div class="time"><image mode="widthFix" class="icon" src="../static/images/time.png"/>{{obj.startTime}}</div>
-      <div class="btn">{{btnText}}</div>
+      <div class="btn" :style="{bottom:(border?'0':'20rpx')}">{{btnText}}</div>
     </div>
   </div>
 </template>
@@ -49,7 +49,7 @@ wepy.component({
       color:#343434;
       font-size: 32rpx;
       font-weight: bold;
-      margin-bottom: 16rpx;
+      margin-bottom: 12rpx;
       .text-line(1);
     }
     .desc{
@@ -59,7 +59,7 @@ wepy.component({
       padding: 0 10rpx;
       color:#3C8EB6;
       font-size: 20rpx;
-      margin-bottom: 20rpx;
+      margin-bottom: 16rpx;
       background-color:rgba(60, 141, 181, 0.08);
       border-radius: 8rpx;
       .text-line(2);
@@ -76,7 +76,7 @@ wepy.component({
     }
     .btn{
       position:absolute;
-      right:20rpx;
+      right:24rpx;
       bottom:20rpx;
       color:#fff;
       font-size: 24rpx;

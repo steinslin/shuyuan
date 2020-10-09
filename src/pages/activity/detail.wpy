@@ -2,20 +2,23 @@
   <div class="page">
     <import src="../../components/wxParse/wxParse.wxml"/>
     <img class="banner" :src="detail.activityImg2"/>
-    <div class="title">{{detail.activityTitle}}</div>
-    <div class="desc">{{detail.introduce}}</div>
-    <div class="p1">
-      <span class="time">{{detail.startTime}}</span>
-      <span class="price fr">￥<span class="num">{{detail.activityPrice}}</span><span class="peo">/人</span></span>
-    </div>
-    <div class="p2">
-      <span>联系我们</span>
-      <image class="icon" mode="widthFix" src="../../static/images/wechat.png" @click="wachatShow=true"/>
-      <image class="icon" mode="widthFix" src="../../static/images/phone.png" @click="makePhone"/>
-      <div class="btn fr" @click="signUp">{{param.ispast==1?"立即报名":"立即预约"}}</div>
-    </div>
-    <div class="text-content">
-      <wx-template is="wxParse" data="{{wxParseData:article2.nodes}}"/>
+    <div class="container">
+      <div class="title">{{detail.activityTitle}}</div>
+      <div class="desc">{{detail.introduce}}</div>
+      <div class="p1">
+        <span class="time">{{detail.startTime}}</span>
+        <span class="price fr">￥<span class="num">{{detail.activityPrice}}</span><span class="peo">/人</span></span>
+      </div>
+      <div class="p2">
+        <span>联系我们</span>
+        <image class="icon" mode="widthFix" src="../../static/images/wechat.png" @click="wachatShow=true"/>
+        <image class="icon" mode="widthFix" src="../../static/images/phone.png" @click="makePhone"/>
+        <div class="btn fr" @click="signUp">{{param.ispast==1?"立即报名":"立即预约"}}</div>
+      </div>
+      <div class="text-content">
+        <wx-template is="wxParse" data="{{wxParseData:article2.nodes}}"/>
+        <!-- <rich-text :nodes="detail.activityDesc"/> -->
+      </div>
     </div>
     <div class="dialog" v-if="wachatShow">
       <div class="content">
@@ -61,41 +64,63 @@ wepy.page({
   async onLoad (param) {
     this.phone = (await this.$apis.agreementView({type:2})).agreement
     this.wechat = (await this.$apis.agreementView({type:3})).agreement
-    WxParse.wxParse('article', 'html', this.wechat.context, this.$wx, 20)
+    WxParse.wxParse('article', 'html', this.wechat.context, this.$wx, 0)
     let detail = await this.$apis.activityInfoSel(param.activityid)
     console.log(param)
     this.param = param
     this.detail = detail.activityInfo
-    WxParse.wxParse('article2', 'html', this.detail.activityDesc, this.$wx, 20)
+    WxParse.wxParse('article2', 'html', this.detail.activityDesc.replaceAll("<o:p>",""), this.$wx, 0)
+  },
+  async onPullDownRefresh () {
+    this.$wx.onLoad()
+    wx.stopPullDownRefresh()
+  },
+  onShareAppMessage (ops) {
+    if (ops.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(ops.target)
+    }
+    return {
+      title: '一起来玩耍吧',
+      path: `/pages/activity/detail?activityid=${this.param.activityid}`,
+      success: function (res) {
+        // 转发成功
+        console.log("转发成功:" + JSON.stringify(res));
+      },
+      fail: function (res) {
+        // 转发失败
+        console.log("转发失败:" + JSON.stringify(res));
+      }
+    }
   }
 })
 </script>
 <style lang="less" scoped>
 @import "../../static/style/common.less";
 .page{
-  padding: 28rpx;
+  // padding: 28rpx;
 }
 .banner{
   width:690rpx;
   height:425rpx;
-  margin: 0 auto 24rpx;
+  margin: 24rpx auto;
   border-radius: 10rpx;
 }
 .title{
   font-size: 30rpx;
-  margin-bottom: 18rpx;
+  margin-bottom: 10rpx;
 }
 .desc{
   color:#AEAEAE;
   font-size: 24rpx;
-  margin-bottom: 32rpx;
+  margin-bottom: 20rpx;
 }
 .p1{
   color:#666666;
   padding-bottom: 30rpx;
   border-bottom: 1px dashed #3B8DB5;
   .time{
-    font-size: 26rpx;
+    font-size: 24rpx;
   }
   .price{
     font-size: 36rpx;
@@ -132,6 +157,9 @@ wepy.page({
 }
 .text-content{
   padding-top: 50rpx;
+  view,image{
+    width:100% !important;
+  }
 }
 .dialog{
   position: fixed;
@@ -198,3 +226,11 @@ wepy.page({
   }
 }
 </style>
+<config>
+{
+    enablePullDownRefresh: true,
+    "usingComponents": {
+      "banner":"../../components/banner"
+    }
+}
+</config>

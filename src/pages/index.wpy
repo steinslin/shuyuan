@@ -6,7 +6,7 @@
     </div>
     <div class="container">
       <navigator url="/pages/notice" class="notice" hover-class="none">
-        <image class="icon" src="../static/images/notice.png"/>
+        <image mode="widthFix" class="icon" src="../static/images/notice.png"/>
         <span class="text">{{noticeList.length>0?noticeList[0].noticeTitle:"暂无公告"}}</span>
         <image class="arrow-right" src="../static/images/arrow-right.png"/>
       </navigator>
@@ -62,12 +62,30 @@
      this.noticeList = noticeList.rows
      let info = await this.$apis.agreementView({type:1})
      this.detail = info.agreement.context?info.agreement.context:"暂无数据"
-     WxParse.wxParse('article', 'html', this.detail, this.$wx, 20)
+     WxParse.wxParse('article', 'html', this.detail.replaceAll("<o:p>",""), this.$wx, 20)
    },
     async onPullDownRefresh () {
      this.$wx.onLoad()
      wx.stopPullDownRefresh()
    },
+   onShareAppMessage (ops) {
+    if (ops.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(ops.target)
+    }
+    return {
+      title: '一起来玩耍吧',
+      path: '/pages/index',
+      success: function (res) {
+        // 转发成功
+        console.log("转发成功:" + JSON.stringify(res));
+      },
+      fail: function (res) {
+        // 转发失败
+        console.log("转发失败:" + JSON.stringify(res));
+      }
+    }
+  }
   });
 </script>
 <style lang="less" scoped>

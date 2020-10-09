@@ -1,11 +1,11 @@
 <template>
   <div class="page">
-    <div class="activity-item">
-      <image class="img" :src="detail.activityImg"/>
+    <div class="activity-item" :class="{alignCenter:detail.isPast==1}">
+      <image class="img" :src="detail.isPast==1?detail.activityImg2:detail.activityImg"/>
       <div class="info">
         <div class="title">{{detail.activityTitle}}</div>
         <div class="desc">{{detail.introduce}}</div>
-        <div class="price">￥<span class="num">{{detail.activityPrice}}</span>/人 </div>
+        <div class="price" v-if="detail.isPast==1">￥<span class="num">{{detail.activityPrice}}</span>/人 </div>
       </div>
     </div>
     <div class="form">
@@ -18,7 +18,7 @@
         <input type="number" class="input" placeholder="请填写联系电话" v-model="form.contactsTel" maxlength="11"/>
       </div>
       <div class="item">
-        <div class="label">报名人数</div>
+        <div class="label">{{detail.isPast==1?"报名人数":"访校参与人数"}}</div>
         <div class="text">
           <van-stepper :max="detail.number" :value="form.number" @change="numChange"/>
         </div>
@@ -28,7 +28,7 @@
         <input type="input" class="input" placeholder="请选择年级" :disabled="true" :value="columns[gradeIndex]"/>
       </div>
       <div class="item">
-        <div class="label">活动日期</div>
+        <div class="label">{{detail.isPast==1?"活动日期":"访校日期"}}</div>
         <div class="text">{{detail.startTime}}</div>
       </div>
       <div class="item bk">
@@ -49,7 +49,8 @@
         @confirm="gradeShow = false"
       />
     </van-popup>
-    <shop-bar :price="detail.activityPrice * form.number" @pay="pay"/>
+    <div class="submit" v-if="detail.isPast==-1" @click="pay">确认预约</div>
+    <shop-bar :price="detail.activityPrice * form.number" @pay="pay" v-if="detail.isPast==1"/>
   </div>
 </template>
 <script>
@@ -67,7 +68,7 @@
        contactsTel:"",
        contacts:"",
        number:1,
-       grade:"",
+       grade:"无",
        orderRemarks:""
      }
    },
@@ -84,7 +85,17 @@
       this.form.grade = this.columns[this.gradeIndex]
       console.log(`当前值：${value}, 当前索引：${index}`);
      },
+     validate() {
+       if(this.form.contacts==""){
+         this.$showToast("请填写联系人")
+       }else if(this.form.contactsTel==""){
+         this.$showToast("请填写联系电话")
+       }else{
+         return true
+       }
+     },
      async pay () {
+       if(!this.validate()) return
        let token = (await this.$apis.getToken()).token
        let orderAdd = await this.$apis.orderActivityAdd({
          activityId:this.param.activityid,
@@ -97,7 +108,7 @@
          orderRemarks:this.form.orderRemarks
        })
        if(orderAdd.code == 0){
-         if(this.detail.isFree !== 0){
+         if(this.detail.isPast == 1 && this.detail.isFree !== 0){
           try{
             let wxPay = await this.$apis.wxPay({
               activityId: this.param.activityid,
@@ -129,7 +140,25 @@
      let detail = await this.$apis.activityInfoSel(param.activityid)
      this.detail = detail.activityInfo
      this.param = param
-   }
+   },
+   onShareAppMessage (ops) {
+    if (ops.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(ops.target)
+    }
+    return {
+      title: '一起来玩耍吧',
+      path: `/pages/activity/appointment?activityid=${this.param.activityid}`,
+      success: function (res) {
+        // 转发成功
+        console.log("转发成功:" + JSON.stringify(res));
+      },
+      fail: function (res) {
+        // 转发失败
+        console.log("转发失败:" + JSON.stringify(res));
+      }
+    }
+  }
   });
 </script>
 <style lang="less" scoped>
@@ -137,8 +166,11 @@
 .activity-item{
   display: flex;
   padding: 28rpx;
-  align-items: center;
+  // align-items: center;
   border-bottom:1px solid #DCDCDC;
+  &.alignCenter{
+    align-items: center;
+  }
   .img{
     width:280rpx;
     height:170rpx;
@@ -150,13 +182,16 @@
     .title{
       font-size: 30rpx;
       color:#343434;
-      margin-bottom: 20rpx;
+      margin-bottom: 10rpx;
+      .text-line(1);
     }
     .desc{
       color:#AEAEAE;
       font-size: 26rpx;
-      margin-bottom: 14rpx;
-      .text-line(2);
+      margin-bottom: 6rpx;
+      height: 86rpx;
+      line-height: 28rpx;
+      .text-line(3);
     }
     .price{
       .num{
@@ -195,6 +230,19 @@
       text-align: right;
     }
   }
+}
+.submit{
+  position: fixed;
+  left:50%;
+  bottom:16rpx;
+  transform: translateX(-50%);
+  width: 694rpx;
+  height: 98rpx;
+  text-align: center;
+  line-height: 98rpx;
+  color:#fff;
+  background: #3B8DB5;
+  border-radius: 49rpx;
 }
 </style>
 <wxs module="m1" lang="babel">

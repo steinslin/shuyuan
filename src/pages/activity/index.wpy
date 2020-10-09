@@ -1,8 +1,10 @@
 <template>
   <div class="page">
-    <van-tabs :active="tabIndex" @change="tabChange" color="#3C8DB5">
-      <van-tab :title="item.navName" v-for="(item, index) in navList" :key="index"></van-tab>
-    </van-tabs>
+    <div class="tabs">
+      <van-tabs v-if="navList.length > 0" :active="tabIndex" @change="tabChange" color="#3C8DB5">
+        <van-tab :title="item.navName" v-for="(item, index) in navList" :key="index"></van-tab>
+      </van-tabs>
+    </div>
     <image class="banner" :src="navList[tabIndex].navImg" @click="detail"/>
     <div class="list" v-if="activityList.length > 0">
       <activity-item v-for="(item, index) in activityList" :key="index" :obj="item" btnText="立即报名"/>
@@ -48,6 +50,24 @@
      this.$wx.onLoad()
      wx.stopPullDownRefresh()
    },
+   onShareAppMessage (ops) {
+    if (ops.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(ops.target)
+    }
+    return {
+      title: '一起来玩耍吧',
+      path: '/pages/activity/index',
+      success: function (res) {
+        // 转发成功
+        console.log("转发成功:" + JSON.stringify(res));
+      },
+      fail: function (res) {
+        // 转发失败
+        console.log("转发失败:" + JSON.stringify(res));
+      }
+    }
+  }
   });
 </script>
 <style lang="less" scoped>
@@ -58,11 +78,15 @@
   margin:30rpx auto 48rpx;
   border-radius: 12rpx;
   transform: translateZ(0);
+  box-shadow: 0 6rpx 12rpx rgba(0,0,0,0.3);
   overflow: hidden;
 }
 .list{
   padding: 28rpx 0;
   background-color:#3C8DB5;
+}
+.tabs{
+  border-bottom:1px solid #DCDCDC;
 }
 </style>
 <wxs module="m1" lang="babel">

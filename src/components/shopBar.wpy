@@ -35,7 +35,7 @@
     font-weight: 400;
     color:#3B8DB5;
     padding-left: 40rpx;
-    background:rgba(59, 141, 181, 0.16);
+    background:#DFEDF3;
     border-radius: 49px 6px 6px 49px;
     .price{
       font-size: 40rpx;

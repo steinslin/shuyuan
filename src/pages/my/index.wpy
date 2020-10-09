@@ -59,7 +59,25 @@
    },
    onLoad () {
      this.userInfo = wx.getStorageSync("userInfo") || ""
-   }
+   },
+   onShareAppMessage (ops) {
+    if (ops.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(ops.target)
+    }
+    return {
+      title: '一起来玩耍吧',
+      path: `/pages/my/index`,
+      success: function (res) {
+        // 转发成功
+        console.log("转发成功:" + JSON.stringify(res));
+      },
+      fail: function (res) {
+        // 转发失败
+        console.log("转发失败:" + JSON.stringify(res));
+      }
+    }
+  }
   });
 </script>
 <style lang="less" scoped>
@@ -84,11 +102,15 @@
   }
 }
 .main{
+  margin-top: 40rpx;
   .icon{
     margin-top: 6rpx;
     margin-right: 20rpx;
     width:36rpx;
   }
+}
+.van-cell{
+  padding: 24rpx 32rpx !important;
 }
 </style>
 <wxs module="m1" lang="babel">

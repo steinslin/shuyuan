@@ -12,6 +12,18 @@ export default class Api {
     this.data = "";
     this.method = "POST";
     this.msg = "";
+    this.page = {
+      /**
+       * @description: 页面刷新
+       */
+      reload: () => {
+        let pages = getCurrentPages(),          //获取加载的页面栈
+        currentPage = pages[pages.length - 1]    //获取当前页面的对象
+        currentPage.onShow()                    //重新加载生命周期onShow
+        currentPage.onLoad()                    //重新加载生命周期onLoad
+        currentPage.onReady()                   //重新加载生命周期onReady
+      }
+    }
     //默认参数
 
     //传入参数
@@ -34,22 +46,24 @@ export default class Api {
         data: this.data,
         header: {
           'content-type':'application/x-www-form-urlencoded', // 默认值
-          'Cookie':'JSESSIONID='+token
+          'Cookie':'JSESSIONID='+token,
+          'requestType':'wachat'
         },
         method: this.method.toUpperCase(),
         success: async (res) => {
-          if(res && typeof res.data !== "string"){
+          if(res && res.data.code != "40008"){
             console.log("请求成功")
             resolve(res)
           }else{
             console.log("请求失败",await this.getToken())
-            wx.showToast({
-              title: '登录失败',
-              icon: 'none',
-              duration: 2000
-            })
+            // wx.showToast({
+            //   title: '登录失败',
+            //   icon: 'none',
+            //   duration: 2000
+            // })
             token = await this.getToken()
             wx.setStorageSync('token', token);
+            this.page.reload()
             reject("请求错误",res)
           }
         },
@@ -67,16 +81,7 @@ export default class Api {
       title: this.msg
     })
 
-    let timer = setTimeout(() => {
-      wx.showToast({
-        title: '请求超时!',
-        icon: 'none',
-        duration: 2000
-      })
-      this.msg && wx.hideLoading()
-      wx.hideNavigationBarLoading()
-      return
-    }, this.limit)
+    let timer = ""
 
     let result = (await this.ajax()).data;
     if (result) {
@@ -84,6 +89,17 @@ export default class Api {
       wx.hideNavigationBarLoading()
       clearTimeout(timer);
       return result;
+    }else{
+      timer = setTimeout(() => {
+        wx.showToast({
+          title: '请求超时!',
+          icon: 'none',
+          duration: 2000
+        })
+        this.msg && wx.hideLoading()
+        wx.hideNavigationBarLoading()
+        return
+      }, this.limit)
     }
 
 
@@ -100,7 +116,8 @@ export default class Api {
             data : {code:code},
             header : {
               'content-type':'application/x-www-form-urlencoded', // 默认值
-              'Cookie':'JSESSIONID='
+              'Cookie':'JSESSIONID=',
+              'requestType':'wachat'
             },
             method : "POST",
             success(res){

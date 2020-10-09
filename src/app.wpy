@@ -22,6 +22,9 @@ wepy.app({
   },
 
   async onLaunch() {
+    String.prototype.replaceAll  = function(s1,s2){     
+      return this.replace(new RegExp(s1,"gm"),s2);     
+    }   
     this.__proto__.__proto__.$apis = apis;
     this.__proto__.__proto__.$dayjs = dayjs;
     this.__proto__.__proto__.$showToast = (title, duration = 2000) => {
@@ -63,7 +66,7 @@ wepy.app({
       "pages/my/aboutUs"
     ],
     window: {
-      "navigationBarTitleText":"深圳市万科城梅沙书院",
+      "navigationBarTitleText":"深圳市万科梅沙书院",
       "navigationBarBackgroundColor": "#FFF",
       "navigationBarTextStyle": "black",
       "backgroundColor": "#eeeeee",

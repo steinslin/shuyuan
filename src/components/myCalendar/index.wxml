@@ -1,6 +1,6 @@
 <view class="flex b tb ac" wx:if="{{calendar}}">
   <view class="calendar pink-color b tb">
-    <view class="top-handle fs28 b lr ac pc">
+    <view class="top-handle fs32 b lr ac pc">
       <view class="prev fs36">
         <!-- <text class="prev-handle iconfont icon-doubleleft" bindtap="chooseDate" data-type="prev_year"></text> -->
         <text class="prev-handle iconfont icon-left" bindtap="chooseDate" data-type="prev_month"></text>

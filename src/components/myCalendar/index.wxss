@@ -112,7 +112,7 @@
 .day {
   width: 60rpx;
   height: 60rpx;
-  font-size: 28rpx;
+  font-size: 32rpx;
   font-weight: 200;
 }
 

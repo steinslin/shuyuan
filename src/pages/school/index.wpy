@@ -16,7 +16,8 @@
       <div class="item" :class="{on:tabIndex==index}" v-for="(item, index) in tabs" :key="index" @click="tabChange(index)">{{item}}</div>
     </div>
     <div class="list" v-if="tabIndex == 0">
-      <activity-item v-for="(item, index) in activityList" v-if="item.isPast == -1" :key="index" :obj="item" btnText="立即预约" :border="true"/>
+      <image class="school" :src="item.activityImg" v-for="(item, index) in activityList" v-if="item.isPast == -1" :key="index" @click="appoint(item)"/>
+      <!-- <activity-item v-for="(item, index) in activityList" v-if="item.isPast == -1" :key="index" :obj="item" btnText="立即预约" :border="true"/> -->
     </div>
     <div class="list" v-if="tabIndex == 1">
       <activity-item v-for="(item, index) in activityList" v-if="item.isPast == 1" :key="index" :obj="item" btnText="立即报名" :border="true"/>
@@ -72,33 +73,22 @@
             day
           })
         })
-        console.log(days, days2)
         // 可预约、报名
-        // setTodoLabels({
-        //   pos:'bottom',
-        //   color:'#3C8EB6',
-        //   days,
-        // });
         setTodoLabels({
-          pos: 'bottom', // 待办点标记位置 ['top', 'bottom']
-          showLabelAlways: true, // 点击时是否显示待办事项（圆点/文字），在 circle 为 true 及当日历配置 showLunar 为 true 时，此配置失效
-          days: [
-            {
-              year: 2020,
-              month: 10,
-              day: 1,
-              color: '#f40' // 单独定义代办颜色 (标记点、文字)
-            },
-            {
-              year: 2020,
-              month: 10,
-              day: 15,
-              color: '#000'
-            }
-          ]
-        })
+          pos:'bottom',
+          dotColor:'#3C8EB6',
+          days,
+        });
       }
     },
+    appoint (item) {
+      wx.navigateTo({
+        url:`/pages/activity/appointment?activityid=${item.activityId}`
+      })
+      // wx.navigateTo({
+      //   url:`/pages/activity/detail?activityid=${item.activityId}&ispast=${item.isPast}`
+      // })
+    }
    },
    async onLoad () {
      initCalendar({
@@ -129,9 +119,27 @@
      this.renderCurMonthMark(this, this.$dayjs().format("YYYY-MM-01"))
      wx.stopPullDownRefresh()
    },
+   onShareAppMessage (ops) {
+    if (ops.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(ops.target)
+    }
+    return {
+      title: '一起来玩耍吧',
+      path: '/pages/index',
+      success: function (res) {
+        // 转发成功
+        console.log("转发成功:" + JSON.stringify(res));
+      },
+      fail: function (res) {
+        // 转发失败
+        console.log("转发失败:" + JSON.stringify(res));
+      }
+    }
+  }
   });
 </script>
-<style lang="less" scoped>
+<style lang="less">
 @import "../../static/style/common.less";
 .hint{
   padding: 0 30rpx 20rpx;
@@ -178,6 +186,13 @@
 }
 .list{
   padding-top: 28rpx;
+}
+.school{
+  width:690rpx;
+  height:290rpx;
+  margin: 0 auto;
+  border-radius: 12rpx;
+  overflow: hidden;
 }
 </style>
 <wxs module="m1" lang="babel">
