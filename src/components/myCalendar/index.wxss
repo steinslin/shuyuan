@@ -80,7 +80,7 @@
 .top-handle {
   height: 80rpx;
   margin:0 30rpx 20rpx 30rpx;
-  border-bottom: 1px solid #e6e6e6;
+  /* border-bottom: 1px solid #e6e6e6; */
 }
 
 .prev-handle,

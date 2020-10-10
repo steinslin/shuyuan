@@ -80,7 +80,7 @@ wepy.component({
       bottom:20rpx;
       color:#fff;
       font-size: 24rpx;
-      padding: 6rpx 18rpx;
+      padding: 8rpx 18rpx;
       background-color:#3C8DB5;
       border-radius: 24rpx;
     }

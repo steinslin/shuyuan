@@ -55,8 +55,8 @@
          orderId: this.param.orderid
        })
        if(feedBackAdd.code == 0){
+         this.$showToast("提交成功")
          setTimeout(() => {
-          this.$showToast("提交成功")
           wx.navigateBack()
          },2000)
        }else{
