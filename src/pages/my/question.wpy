@@ -36,12 +36,21 @@
      param:{},
      question:[{
        type:"radio",
-       title:"1. 您对万科梅沙书院的满意程度",
+       title:"1. 你对本次活动的满意程度？",
        list:["十分满意","满意","一般","不满意"],
        index:0
      },{
+       type:"radio",
+       title:"2. 本次活动你最喜欢哪个环节？",
+       list:["讲座","校园参观","体验课","午餐体验","节目表演"],
+       index:0
+     },{
        type:"textarea",
-       title:"2. 您对万科梅沙书院有什么建议",
+       title:"3. 你对本次活动建议（如有）？",
+       value:""
+     },{
+       type:"textarea",
+       title:"4. 你理想的高中是哪所学校呢？（原因）",
        value:""
      }]
    },

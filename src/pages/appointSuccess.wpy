@@ -19,10 +19,6 @@
           <div class="text">{{param.number}}人</div>
         </div>
         <div class="item">
-          <div class="label">年级</div>
-          <div class="text">{{param.grade}}</div>
-        </div>
-        <div class="item">
           <div class="label">访校日期</div>
           <div class="text">{{orderInfo.time}}</div>
         </div>

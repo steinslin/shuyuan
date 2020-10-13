@@ -16,11 +16,21 @@
       <div class="item" :class="{on:tabIndex==index}" v-for="(item, index) in tabs" :key="index" @click="tabChange(index)">{{item}}</div>
     </div>
     <div class="list" v-if="tabIndex == 0">
-      <image class="school" :src="item.activityImg" v-for="(item, index) in activityList" v-if="item.isPast == -1" :key="index" @click="appoint(item)"/>
+      <block v-if="activityList.length > 0">
+        <image class="school" :src="item.activityImg" v-for="(item, index) in activityList" v-if="item.isPast == -1" :key="index" @click="appoint(item)"/>
+      </block>
+      <block v-else>
+        <image mode="widthFix" class="no-data" src="../../static/images/no-data2.png"/>
+      </block>
       <!-- <activity-item v-for="(item, index) in activityList" v-if="item.isPast == -1" :key="index" :obj="item" btnText="立即预约" :border="true"/> -->
     </div>
     <div class="list" v-if="tabIndex == 1">
-      <activity-item v-for="(item, index) in activityList" v-if="item.isPast == 1" :key="index" :obj="item" btnText="立即报名" :border="true"/>
+      <block v-if="activityList.length > 0">
+        <activity-item v-for="(item, index) in activityList" :key="index" :obj="item" btnText="立即报名" :border="true"/>
+      </block>
+      <block v-else>
+        <image mode="widthFix" class="no-data" src="../../static/images/no-data.png"/>
+      </block>
     </div>
   </div>
 </template>
@@ -125,8 +135,8 @@
       console.log(ops.target)
     }
     return {
-      title: '一起来玩耍吧',
-      path: '/pages/index',
+      title: '',
+      path: '/pages/school/index',
       success: function (res) {
         // 转发成功
         console.log("转发成功:" + JSON.stringify(res));
@@ -188,11 +198,17 @@
   padding-top: 28rpx;
 }
 .school{
+  display:block;
   width:690rpx;
   height:290rpx;
   margin: 0 auto;
   border-radius: 12rpx;
   overflow: hidden;
+}
+.no-data{
+  display: block;
+  width:690rpx;
+  margin:0 auto;
 }
 </style>
 <wxs module="m1" lang="babel">

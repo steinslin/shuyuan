@@ -56,11 +56,11 @@ wepy.component({
     async bannerTap (positionType, activityId, id) {
       // 公司产品
       if(positionType == 0){
-        console.log("公司产品")
+        console.log("公司产品",activityId)
         if(activityId > 0){
-          this.$gd.activityId = activityId
+          // this.$gd.activityId = activityId
           wx.navigateTo({
-            url: `/pages/product/detail?activityId=${activityId}`
+            url: `/pages/activity/detail?activityId=${activityId}&isPast=1`
           })
         }else{
           this.$showToast("暂无公司产品",2000,-1)

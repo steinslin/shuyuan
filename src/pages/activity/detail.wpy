@@ -7,13 +7,17 @@
       <div class="desc">{{detail.introduce}}</div>
       <div class="p1">
         <span class="time">{{detail.startTime}}</span>
-        <span class="price fr">￥<span class="num">{{detail.activityPrice}}</span><span class="peo">/人</span></span>
+        <span class="price fr">
+          <block v-if="detail.isFree==0"><span class="num">免费</span></block>
+          <block v-else>￥<span class="num">{{detail.activityPrice}}</span><span class="peo">/人</span></block>
+        </span>
       </div>
       <div class="p2">
         <span>联系我们</span>
         <image class="icon" mode="widthFix" src="../../static/images/wechat.png" @click="wachatShow=true"/>
-        <image class="icon" mode="widthFix" src="../../static/images/phone.png" @click="makePhone"/>
-        <div class="btn fr" @click="signUp">{{param.ispast==1?"立即报名":"立即预约"}}</div>
+        <image class="icon" mode="widthFix" src="../../static/images/phone.png" @click="phoneShow = true"/>
+        <div class="btn fr" v-if="detail.nowTime >= detail.activityBeginTime" @click="signUp">{{param.isPast==1?"立即报名":"立即预约"}}</div>
+        <div class="btn disabled fr" v-else>报名未开始</div>
       </div>
       <div class="text-content">
         <wx-template is="wxParse" data="{{wxParseData:article2.nodes}}"/>
@@ -36,6 +40,11 @@
         <div class="btn" @click="wachatShow = false">我知道了</div>
       </div>
     </div>
+    <van-popup position="bottom" :show="phoneShow" @close="phoneShow = false">
+      <div class="phone-list">
+        <div class="item" v-for="(item, index) in phone" @click="makePhone(item)">{{item}}</div>
+      </div>
+    </van-popup>
   </div>
 </template>
 <script>
@@ -45,30 +54,33 @@ wepy.page({
   data:{
     param:{},
     phone:"",
+    phoneShow:false,
     wechat:"",
     detail:{},
     wachatShow:false
   },
   methods:{
-    makePhone () {
+    makePhone (phone) {
       wx.makePhoneCall({
-        phoneNumber: this.phone.context //仅为示例，并非真实的电话号码
+        phoneNumber: phone //仅为示例，并非真实的电话号码
       })
     },
     signUp () {
       wx.navigateTo({
-        url:`/pages/activity/appointment?activityid=${this.param.activityid}`
+        url:`/pages/activity/appointment?activityId=${this.param.activityId}`
       })
     }
   },
   async onLoad (param) {
-    this.phone = (await this.$apis.agreementView({type:2})).agreement
+    this.phone = (await this.$apis.agreementView({type:2})).agreement.context.split(",")
     this.wechat = (await this.$apis.agreementView({type:3})).agreement
     WxParse.wxParse('article', 'html', this.wechat.context, this.$wx, 0)
-    let detail = await this.$apis.activityInfoSel(param.activityid)
+    let detail = await this.$apis.activityInfoSel(param.activityId)
     console.log(param)
     this.param = param
     this.detail = detail.activityInfo
+    this.detail.nowTime = this.$dayjs().format("YYYY-MM-DD hh:mm:ss")
+    console.log(this.detail,"detail")
     WxParse.wxParse('article2', 'html', this.detail.activityDesc.replaceAll("<o:p>",""), this.$wx, 0)
   },
   async onPullDownRefresh () {
@@ -81,8 +93,8 @@ wepy.page({
       console.log(ops.target)
     }
     return {
-      title: '一起来玩耍吧',
-      path: `/pages/activity/detail?activityid=${this.param.activityid}`,
+      title: '',
+      path: `/pages/activity/detail?activityId=${this.param.activityId}`,
       success: function (res) {
         // 转发成功
         console.log("转发成功:" + JSON.stringify(res));
@@ -153,11 +165,15 @@ wepy.page({
     background-color:#3B8DB5;
     color:#fff;
     border-radius: 40rpx;
+    &.disabled{
+      background:#999;
+    }
   }
 }
 .text-content{
   padding-top: 50rpx;
-  view,image{
+  view,
+  image{
     width:100% !important;
   }
 }
@@ -225,12 +241,20 @@ wepy.page({
     }
   }
 }
+.phone-list{
+  .item{
+    text-indent:20rpx;
+    height:80rpx;
+    line-height: 80rpx;
+  }
+}
 </style>
 <config>
 {
     enablePullDownRefresh: true,
     "usingComponents": {
-      "banner":"../../components/banner"
+      "banner":"../../components/banner",
+      "van-popup": "module:@vant/weapp/dist/popup/index",
     }
 }
 </config>

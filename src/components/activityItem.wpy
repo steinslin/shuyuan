@@ -5,7 +5,8 @@
       <div class="title">{{obj.activityTitle}}</div>
       <div class="desc">{{obj.introduce}}</div>
       <div class="time"><image mode="widthFix" class="icon" src="../static/images/time.png"/>{{obj.startTime}}</div>
-      <div class="btn" :style="{bottom:(border?'0':'20rpx')}">{{btnText}}</div>
+      <div class="btn" v-if="nowTime >= obj.activityBeginTime" :style="{bottom:(border?'0':'20rpx')}">{{btnText}}</div>
+      <div class="btn disabled" v-else :style="{bottom:(border?'0':'20rpx')}">报名未开始</div>
     </div>
   </div>
 </template>
@@ -13,15 +14,18 @@
 import wepy from '@wepy/core'
 wepy.component({
   props:["obj","border","btnText"],
+  data:{
+    nowTime:""
+  },
   methods:{
     detail () {
       wx.navigateTo({
-        url:`/pages/activity/detail?activityid=${this.obj.activityId}&ispast=${this.obj.isPast}`
+        url:`/pages/activity/detail?activityId=${this.obj.activityId}&isPast=${this.obj.isPast}`
       })
     }
   },
   ready () {
-
+    this.nowTime = this.$dayjs().format("YYYY-MM-DD hh:mm:ss")
   }
 })
 </script>
@@ -83,6 +87,9 @@ wepy.component({
       padding: 8rpx 18rpx;
       background-color:#3C8DB5;
       border-radius: 24rpx;
+      &.disabled{
+        background:#999;
+      }
     }
   }
 }

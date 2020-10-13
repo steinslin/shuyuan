@@ -1,9 +1,11 @@
 <template>
   <div class="shop-bar">
     <div class="pan">
-      合计：<span class="price">￥{{price}}</span> 
+      合计：
+        <span class="price" v-if="price == 0">免费</span>
+        <span class="price" v-else>￥{{price}}</span>
     </div>
-    <div class="btn" @click="pay">立即支付</div>
+    <div class="btn" @click="pay">{{price == 0?"立即报名":"立即支付"}}</div>
   </div>
 </template>
 <script>

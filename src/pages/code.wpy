@@ -20,10 +20,6 @@
             <div class="text">{{signInfo.number}}人</div>
             </div>
             <div class="item">
-            <div class="label">年级</div>
-            <div class="text">{{signInfo.grade}}</div>
-            </div>
-            <div class="item">
             <div class="label">访校日期</div>
             <div class="text">{{signInfo.activityTime}}</div>
             </div>
@@ -46,12 +42,12 @@
    async onLoad (param) {
       this.param = param
       let signInfo = await this.$apis.activitySignSel({
-        activityId: this.param.activityid
+        activityId: this.param.activityId
       })
       if(signInfo.rows.length == 0){
         // this.$showToast("无签到信息")
         // wx.redirectTo({
-        //   url:`/pages/activity/detail?activityid=${this.param.activityid}`
+        //   url:`/pages/activity/detail?activityId=${this.param.activityId}`
         // })
       }else{
         this.signInfo = signInfo.rows[0]
@@ -63,7 +59,7 @@
    methods:{
      async sure () {
        let activitySign = await this.$apis.activitySign({
-         activityId: this.param.activityid
+         activityId: this.param.activityId
        })
        this.$showToast(activitySign.msg)
       //  wx.redirectTo({

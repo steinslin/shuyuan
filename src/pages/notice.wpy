@@ -25,7 +25,7 @@
       console.log(ops.target)
     }
     return {
-      title: '一起来玩耍吧',
+      title: '',
       path: "/pages/notice",
       success: function (res) {
         // 转发成功

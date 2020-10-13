@@ -11,9 +11,9 @@
         <image class="arrow-right" src="../static/images/arrow-right.png"/>
       </navigator>
       <div class="text-wrap">
-        <div class="title">{{actPhotoName}}</div>
+        <div class="title">活动照片</div>
         <div class="content">
-          <image class="activity-img" v-if="index <= 13" :src="item" v-for="(item, index) in actPhotoList" :key="index" @click="previewImage(item)"/>
+          <image mode="aspectFill" class="activity-img" v-if="index <= 13" :src="item" v-for="(item, index) in actPhotoList" :key="index" @click="previewImage(item)"/>
           <image class="activity-img more" @click="showMore"/>
         </div>
       </div>
@@ -74,7 +74,7 @@
       console.log(ops.target)
     }
     return {
-      title: '一起来玩耍吧',
+      title: '',
       path: '/pages/index',
       success: function (res) {
         // 转发成功

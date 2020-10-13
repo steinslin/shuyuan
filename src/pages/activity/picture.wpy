@@ -4,7 +4,7 @@
       <div class="text-wrap" v-for="(item, index) in actPhotoList" :key="index">
         <div class="title">{{item.actName}}</div>
         <div class="content">
-          <image class="activity-img" :src="itm" v-for="(itm, idx) in item.imgs" :key="idx" @click="previewImage(itm, item.imgs)"/>
+          <image mode="aspectFill" class="activity-img" :src="itm" v-for="(itm, idx) in item.imgs" :key="idx" @click="previewImage(itm, item.imgs)"/>
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@
       console.log(ops.target)
     }
     return {
-      title: '一起来玩耍吧',
+      title: '',
       path: '/pages/activity/picture',
       success: function (res) {
         // 转发成功

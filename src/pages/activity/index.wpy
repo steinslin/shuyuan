@@ -5,10 +5,13 @@
         <van-tab :title="item.navName" v-for="(item, index) in navList" :key="index"></van-tab>
       </van-tabs>
     </div>
-    <image class="banner" :src="navList[tabIndex].navImg" @click="detail"/>
+    <image class="banner" :src="navList[tabIndex].navImg"/>
     <div class="list" v-if="activityList.length > 0">
       <activity-item v-for="(item, index) in activityList" :key="index" :obj="item" btnText="立即报名"/>
     </div>
+    <!-- <div class="list" v-else>
+      <image src="../static/images/no-data2.png"/>
+    </div> -->
   </div>
 </template>
 <script>
@@ -56,7 +59,7 @@
       console.log(ops.target)
     }
     return {
-      title: '一起来玩耍吧',
+      title: '',
       path: '/pages/activity/index',
       success: function (res) {
         // 转发成功
@@ -73,6 +76,7 @@
 <style lang="less" scoped>
 @import "../../static/style/common.less";
 .banner{
+  display:block;
   width:694rpx;
   height:288rpx;
   margin:30rpx auto 48rpx;

@@ -4,8 +4,11 @@
       <van-tab title="全部">
         <activity-order-item :obj="item" v-for="(item, index) in orderList" :key="index"/>
       </van-tab>
-      <van-tab title="已报名">
+      <van-tab title="待审核">
         <activity-order-item :obj="item" v-if="item.orderStatus == 0" v-for="(item, index) in orderList" :key="index"/>
+      </van-tab>
+      <van-tab title="已报名">
+        <activity-order-item :obj="item" v-if="item.orderStatus == 1" v-for="(item, index) in orderList" :key="index"/>
       </van-tab>
       <van-tab title="已结束">
         <activity-order-item :obj="item" v-if="item.orderStatus == 3" v-for="(item, index) in orderList" :key="index"/>

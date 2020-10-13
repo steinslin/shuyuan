@@ -5,7 +5,15 @@
       <div class="info">
         <div class="title">{{detail.activityTitle}}</div>
         <div class="desc">{{detail.introduce}}</div>
-        <div class="price" v-if="detail.isPast==1">￥<span class="num">{{detail.activityPrice}}</span>/人 </div>
+        <div class="time">{{detail.startTime}}</div>
+        <div class="price fr" v-if="detail.isPast==1">
+          <block v-if="detail.isFree == 0">
+            <span class="num">免费</span>
+          </block>
+          <block v-else>
+            ￥<span class="num">{{detail.activityPrice}}</span>/人
+          <block>
+        </div>
       </div>
     </div>
     <div class="form">
@@ -23,31 +31,65 @@
           <van-stepper :max="detail.number" :value="form.number" @change="numChange"/>
         </div>
       </div>
-      <div class="item" @click="gradeShow=true">
+      <div class="item" v-for="(item, index) in formList" :key="index" @click="itemClick(index)">
+        <div class="label">{{item.key}}</div>
+        <input v-if="item.type == 1" type="text" class="input" :placeholder="'请填写'+item.key" placeholder-class="placeholder" v-model="item.value" maxlength="20"/>
+        <input v-if="item.type == 2 || item.type == 3" type="text" class="input" :placeholder="'请选择'+item.key" placeholder-class="placeholder" v-model="item.value" :disabled="true" maxlength="20"/>
+      </div>
+      <!-- <div class="item" @click="grade.show=true">
         <div class="label">年级(如含有学生请选择年级）</div>
-        <input type="input" class="input" placeholder="请选择年级" placeholder-class="placeholder" :disabled="true" :value="columns[gradeIndex]"/>
+        <input type="input" class="input" placeholder="请选择年级" placeholder-class="placeholder" :disabled="true" :value="form.grade"/>
+      </div>
+      <div class="item" @click="source.show=true">
+        <div class="label">得知渠道来源</div>
+        <input type="text" class="input" placeholder="请选择年级得知渠道来源" placeholder-class="placeholder" :disabled="true" v-model="form.source" maxlength="11"/>
+      </div>
+      <div class="item" @click="lunch.show=true">
+        <div class="label">家长校园午餐体验（自费）</div>
+        <input type="text" class="input" placeholder="请选择家长校园午餐体验（自费）" placeholder-class="placeholder" :disabled="true" v-model="form.lunch" maxlength="11"/>
       </div>
       <div class="item">
-        <div class="label">{{detail.isPast==1?"活动日期":"访校日期"}}</div>
-        <div class="text">{{detail.startTime}}</div>
-      </div>
-      <div class="item bk">
+        <div class="label">邮箱地址</div>
+        <input type="text" class="input" placeholder="请填写邮箱地址" placeholder-class="placeholder" v-model="form.email" maxlength="11"/>
+      </div> -->
+      <!-- <div class="item bk">
         <div class="label">备注(可备注留言）</div>
         <div class="text">
           <textarea class="remark" type="text" placeholder="请填写备注(不多于200字)" placeholder-class="placeholder" v-model="form.orderRemarks"/>
         </div>
-      </div>
+      </div> -->
     </div>
-    <van-popup position="bottom" :show="gradeShow" @close="gradeShow = false">
+    <van-popup position="bottom" :show="formList[formIndex].options.show" @close="formList[formIndex].options.show = false">
       <van-picker 
-        title="年级选择" 
+        :title="formList[formIndex].options.title" 
         :show-toolbar="true" 
         toolbar-position="top" 
-        :columns="columns" 
-        @change="pickerChange"
-        @cancel="gradeShow = false"
-        @confirm="gradeShow = false"
+        :columns="formList[formIndex].options.list" 
+        @change="pickerChange($event, formList[formIndex].options.list, 'grade')"
+        @cancel="formList[formIndex].options.show = false"
+        @confirm="formList[formIndex].options.show = false"
       />
+    </van-popup>
+    <van-popup position="bottom" :show="lunch.show" @close="lunch.show = false">
+      <van-picker 
+        :title="lunch.title" 
+        :show-toolbar="true" 
+        toolbar-position="top" 
+        :columns="lunch.list" 
+        @change="pickerChange($event, lunch.list, 'lunch')"
+        @cancel="lunch.show = false"
+        @confirm="lunch.show = false"
+      />
+    </van-popup>
+    <van-popup position="bottom" :show="source.show" @close="source.show = false">
+      <div class="check-panel">
+        <scroll-view class="check-list">
+          <van-checkbox-group :value="source.checked" @change="checkChange">
+            <van-checkbox :name="item" v-for="(item, index) in source.list" :key="index">{{item}}</van-checkbox>
+          </van-checkbox-group>
+        </scroll-view>
+        <div class="btn" @click="source.show = false">确定</div>
+      </div>
     </van-popup>
     <div class="submit" v-if="detail.isPast==-1" @click="pay">确认预约</div>
     <shop-bar :price="detail.activityPrice * form.number" @pay="pay" v-if="detail.isPast==1"/>
@@ -61,29 +103,93 @@
      detail:{},
      tabIndex:0,
      num:0,
-     gradeShow:false,
-     gradeIndex:0,
-     columns: ['无', '一年级', '二年级', '三年级'],
-     form:{
-       contactsTel:"",
-       contacts:"",
-       number:1,
-       grade:"无",
-       orderRemarks:""
-     }
+     formIndex:0,
+     formList:[
+      {
+        id:1,
+        key:"学生就读学校",
+        show:true,
+        value:null,
+        type:1,
+        order:1
+      },
+      {
+        id:2,
+        key:"年级(如含有学生请选择年级）",
+        show:true,
+        value:'无',
+        type:2,
+        order:1,
+        options:{
+          title:"年级选择",
+          index:0,
+          list:["无", "1-6", "7", "8", "9", "10", "11"],
+          show:false
+        }
+      },
+      {
+        id:3,
+        key:"得知渠道来源",
+        show:true,
+        value:"官方微信公众号推荐",
+        type:3,
+        order:1,
+        options:{
+          title:"得知渠道来源",
+          list:["官方微信公众号推荐", "官网网站推荐","学校活动（开放日、教育理想地、echo等）","在校生以及家长推荐","校友以及家长推荐","老师、朋友推荐","教育机构","展会","其它社交媒体"],
+          checked:[],
+          show:false
+        }
+      },
+      {
+        id:4,
+        key:"家长校园午餐体验（自费）",
+        show:true,
+        value:"否",
+        type:2,
+        order:1,
+        options:{
+          title:"家长校园午餐体验",
+          index:0,
+          list:["否", "是"],
+          show:false
+        }
+      },
+    {
+        id:5,
+        key:"邮箱地址",
+        show:true,
+        value:null,
+        type:1,
+        order:1
+      },
+    ],
+    form:{
+      contactsTel:"",
+      contacts:"",
+      number:1,
+    }
    },
    methods:{
-     tabChange (e) {
-       
+     itemClick (index) {
+       if(!this.formList[index].type == 1) return
+      //  this.formList[index].options.show = true
+       this.$set(this.formList[index]["options"],'show',true)
+       this.formIndex = index
+     },
+     checkChange (e) {
+       this.formList[this.formIndex].checked = e.$wx.detail
      },
      numChange (e) {
        this.form.number = e.$wx.detail
      },
-     pickerChange(e) {
+     pickerChange(e, columns, key) {
       const { picker, value, index } = e.$wx.detail;
-      this.gradeIndex = index
-      this.form.grade = this.columns[this.gradeIndex]
-      console.log(`当前值：${value}, 当前索引：${index}`);
+      this.$set(this.formList[this.formIndex]["options"],'index',index)
+      this.$set(this.formList[this.formIndex],'value',value)
+      // this.formList[this.formIndex].options.index = index
+      // this.formList[this.formIndex].options.value = columns[index]
+      console.log(`${key}：${columns[index]}`);
      },
      validate() {
        if(this.form.contacts==""){
@@ -98,23 +204,23 @@
        if(!this.validate()) return
        let token = (await this.$apis.getToken()).token
        let orderAdd = await this.$apis.orderActivityAdd({
-         activityId:this.param.activityid,
+         activityId:this.param.activityId,
          token,
          contactsTel:this.form.contactsTel,
          contacts:this.form.contacts,
          number:this.form.number,
          wx:this.form.contacts,
-         grade:this.columns[this.gradeIndex],
-         orderRemarks:this.form.orderRemarks
+         activityOrderJson:JSON.stringify(this.formList)
        })
        if(orderAdd.code == 0){
          if(this.detail.isPast == 1 && this.detail.isFree !== 0){
           try{
             let wxPay = await this.$apis.wxPay({
-              activityId: this.param.activityid,
+              activityId: this.param.activityId,
               orderId: orderAdd.orderId,
               number:this.form.number,
-              grade:this.columns[this.gradeIndex]
+              wx:this.form.contacts,
+              activityOrderJson:JSON.stringify(this.formList)
             },"HD")
           }catch(err){
             this.$showToast("支付失败")
@@ -123,12 +229,12 @@
          }
          if(this.detail.isPast == -1){
             wx.redirectTo({
-              url:`/pages/my/schoolOrderList`,
+              url:`/pages/appointSuccess`,
             })
           }
           if(this.detail.isPast == 1){
             wx.redirectTo({
-              url:`/pages/my/activityOrderList`
+              url:`/pages/signUpSuccess`
             })
           }
        }else{
@@ -137,8 +243,10 @@
      }
    },
    async onLoad (param) {
-     let detail = await this.$apis.activityInfoSel(param.activityid)
+     console.log(param)
+     let detail = await this.$apis.activityInfoSel(param.activityId)
      this.detail = detail.activityInfo
+     this.formList = JSON.parse(this.detail.activityFormJson)
      this.param = param
    },
    onShareAppMessage (ops) {
@@ -147,8 +255,8 @@
       console.log(ops.target)
     }
     return {
-      title: '一起来玩耍吧',
-      path: `/pages/activity/appointment?activityid=${this.param.activityid}`,
+      title: '',
+      path: `/pages/activity/appointment?activityId=${this.param.activityId}`,
       success: function (res) {
         // 转发成功
         console.log("转发成功:" + JSON.stringify(res));
@@ -178,6 +286,7 @@
     flex-shrink: 0;
   }
   .info{
+    position: relative;
     margin-left: 40rpx;
     .title{
       font-size: 30rpx;
@@ -193,7 +302,15 @@
       line-height: 28rpx;
       .text-line(3);
     }
+    .time{
+      display: inline-block;
+      font-size: 26rpx;
+      color:#666;
+    }
     .price{
+      position: absolute;
+      right: 0;
+      bottom: 0;
       .num{
         color:#F19149;
         font-weight: bold;
@@ -247,6 +364,22 @@
 .placeholder{
   color:#9a9a9a;
 }
+.check-panel{
+  .check-list{
+    padding: 20rpx;
+    box-sizing: border-box;
+  }
+  .btn{
+    color:#fff;
+    text-align: center;
+    height:90rpx;
+    line-height: 90rpx;
+    background-color:#4a86ee;
+  }
+}
+.van-checkbox{
+  padding: 10rpx;
+}
 </style>
 <wxs module="m1" lang="babel">
 const getTime = (time) => {
@@ -268,6 +401,8 @@ module.exports.getTime = getTime;
       "van-stepper": "module:@vant/weapp/dist/stepper/index",
       "van-popup": "module:@vant/weapp/dist/popup/index",
       "van-picker": "module:@vant/weapp/dist/picker/index",
+      "van-checkbox": "module:@vant/weapp/dist/checkbox/index",
+      "van-checkbox-group": "module:@vant/weapp/dist/checkbox-group/index",
       "activity-item": "../../components/activityItem",
       "shop-bar":"../../components/shopBar"
     }

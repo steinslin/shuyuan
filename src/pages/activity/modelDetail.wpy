@@ -9,7 +9,7 @@
   let WxParse = require('../../components/wxParse/wxParse.js')
   wepy.page({
    data:{
-       detail:""
+    detail:""
    },
    methods:{
    },
