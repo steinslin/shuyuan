@@ -53,6 +53,7 @@ wepy.app({
       "pages/code",
       "pages/appointSuccess",
       "pages/signUpSuccess",
+      "pages/underReview",
       "pages/school/index",
       "pages/school/index2",
       "pages/activity/index",

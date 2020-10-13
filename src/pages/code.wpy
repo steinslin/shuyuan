@@ -25,7 +25,8 @@
             </div>
         </div>
         </div>
-        <div class="btn" @click="sure">签到</div>
+        <div class="btn" @click="sure" v-if="!sign">签到</div>
+        <div class="btn disabled" v-else>已签到</div>
     </template>
     <template v-else>
         <div class="hint">无签到信息！</div>
@@ -37,7 +38,8 @@
   wepy.page({
    data:{
      param:{},
-     signInfo:""
+     signInfo:"",
+     sign:false,
    },
    async onLoad (param) {
       this.param = param
@@ -61,7 +63,11 @@
        let activitySign = await this.$apis.activitySign({
          activityId: this.param.activityId
        })
-       this.$showToast(activitySign.msg)
+       if(activitySign.code == 0){
+         this.sign = true
+       }else{
+        this.$showToast(activitySign.msg)
+       }
       //  wx.redirectTo({
       //    url:"/pages/my/index"
       //  })
@@ -136,6 +142,10 @@ page{
   background: #FFFFFF;
   color:#3B8DB5;
   border-radius: 49rpx;
+  &.disabled{
+    background:#999 !important;
+    color:#fff !important;
+  }
 }
 </style>
 <wxs module="m1" lang="babel">

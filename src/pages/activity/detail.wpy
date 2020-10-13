@@ -16,8 +16,10 @@
         <span>联系我们</span>
         <image class="icon" mode="widthFix" src="../../static/images/wechat.png" @click="wachatShow=true"/>
         <image class="icon" mode="widthFix" src="../../static/images/phone.png" @click="phoneShow = true"/>
-        <div class="btn fr" v-if="detail.nowTime >= detail.activityBeginTime" @click="signUp">{{param.isPast==1?"立即报名":"立即预约"}}</div>
-        <div class="btn disabled fr" v-else>报名未开始</div>
+        <div class="btn disabled fr" v-if="detail.nowTime >= detail.endTime" @click="signUp">活动已结束</div>
+        <div class="btn disabled fr" v-else-if="detail.nowTime > detail.deadline">报名已结束</div>
+        <div class="btn disabled fr" v-else-if="detail.nowTime < detail.activityBeginTime">报名未开始</div>
+        <div class="btn fr" v-else-if="detail.nowTime >= detail.activityBeginTime" @click="signUp">{{param.isPast==1?"立即报名":"立即预约"}}</div>
       </div>
       <div class="text-content">
         <wx-template is="wxParse" data="{{wxParseData:article2.nodes}}"/>
@@ -79,7 +81,7 @@ wepy.page({
     console.log(param)
     this.param = param
     this.detail = detail.activityInfo
-    this.detail.nowTime = this.$dayjs().format("YYYY-MM-DD hh:mm:ss")
+    this.detail.nowTime = this.$dayjs().format("YYYY-MM-DD HH:mm:ss")
     console.log(this.detail,"detail")
     WxParse.wxParse('article2', 'html', this.detail.activityDesc.replaceAll("<o:p>",""), this.$wx, 0)
   },

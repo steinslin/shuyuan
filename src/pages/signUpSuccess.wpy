@@ -35,7 +35,7 @@
      orderInfo:""
    },
    async onLoad (param) {
-      let orderInfo = await this.$apis.getCodeInfo(param.orderid)
+      let orderInfo = await this.$apis.getCodeInfo(param.orderId)
       this.orderInfo = orderInfo
       this.param = param
    },
@@ -68,10 +68,11 @@ page{
     font-weight: bold;
   }
   .hint{
-    color:#999999;
+    color: #999999;
     font-size: 24rpx;
-    text-align: center;
     margin-bottom: 70rpx;
+    width: 600rpx;
+    margin: 20rpx auto;
   }
   .dot{
     width:100%;

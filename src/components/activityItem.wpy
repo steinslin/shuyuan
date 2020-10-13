@@ -5,8 +5,14 @@
       <div class="title">{{obj.activityTitle}}</div>
       <div class="desc">{{obj.introduce}}</div>
       <div class="time"><image mode="widthFix" class="icon" src="../static/images/time.png"/>{{obj.startTime}}</div>
-      <div class="btn" v-if="nowTime >= obj.activityBeginTime" :style="{bottom:(border?'0':'20rpx')}">{{btnText}}</div>
-      <div class="btn disabled" v-else :style="{bottom:(border?'0':'20rpx')}">报名未开始</div>
+      <div class="btn disabled" v-if="nowTime >= obj.endTime">活动已结束</div>
+      <div class="btn disabled" v-else-if="nowTime > obj.deadline">报名已结束</div>
+      <div class="btn disabled" v-else-if="nowTime < obj.activityBeginTime">报名未开始</div>
+      <div class="btn" v-else-if="nowTime >= obj.activityBeginTime">{{btnText}}</div>
+      <!-- <div class="btn" v-if="nowTime >= obj.activityBeginTime && nowTime < obj.endTime" :style="{bottom:(border?'0':'20rpx')}">{{btnText}}</div>
+      <div class="btn disabled" v-else-if="nowTime < obj.activityBeginTime" :style="{bottom:(border?'0':'20rpx')}">报名未开始</div>
+      <div class="btn disabled" v-else-if="nowTime > obj.deadline && nowTime < obj.endTime" :style="{bottom:(border?'0':'20rpx')}">报名已结束</div>
+      <div class="btn disabled" v-else-if="nowTime > obj.endTime" :style="{bottom:(border?'0':'20rpx')}">活动已结束</div> -->
     </div>
   </div>
 </template>
@@ -25,7 +31,8 @@ wepy.component({
     }
   },
   ready () {
-    this.nowTime = this.$dayjs().format("YYYY-MM-DD hh:mm:ss")
+    this.nowTime = this.$dayjs().format("YYYY-MM-DD HH:mm:ss")
+    console.log(this.nowTime < this.obj.activityBeginTime,this.nowTime,this.obj.activityBeginTime)
   }
 })
 </script>

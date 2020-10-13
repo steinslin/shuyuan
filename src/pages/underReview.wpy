@@ -1,10 +1,10 @@
 <template>
   <div class="page">
     <div class="card">
-      <div class="title">预约成功！</div>
-      <div class="hint">温馨提示：预约成功，记得在规定时间内使用哦！</div>
+      <div class="title">审核中</div>
+      <div class="hint">温馨提示：您的报名我们已经收到了，我们会快马加鞭审核，请耐心等待！</div>
       <image mode="widthFix" class="dot" src="../static/images/dot.png"/>
-      <image mode="widthFix" class="success" src="../static/images/success2.png"/>
+      <image mode="widthFix" class="success" src="../static/images/underReview.png"/>
       <div class="form">
         <div class="item">
           <div class="label">联系人</div>
@@ -15,11 +15,11 @@
           <div class="text">{{param.phonenumber}}</div>
         </div>
         <div class="item">
-          <div class="label">访校人数</div>
+          <div class="label">报名人数</div>
           <div class="text">{{param.number}}人</div>
         </div>
         <div class="item">
-          <div class="label">访校日期</div>
+          <div class="label">活动日期</div>
           <div class="text">{{orderInfo.time}}</div>
         </div>
       </div>
@@ -124,7 +124,7 @@ module.exports.getTime = getTime;
 </wxs>
 <config>
 {
-    "navigationBarTitleText":"报名成功",
+    "navigationBarTitleText":"审核中",
     "usingComponents": {
       
     }

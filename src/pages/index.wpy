@@ -11,14 +11,16 @@
         <image class="arrow-right" src="../static/images/arrow-right.png"/>
       </navigator>
       <div class="text-wrap">
-        <div class="title">活动照片</div>
+        <!-- <div class="title">活动照片</div> -->
+        <image mode="widthFix" class="icon" src="../static/images/title1.png"/>
         <div class="content">
           <image mode="aspectFill" class="activity-img" v-if="index <= 13" :src="item" v-for="(item, index) in actPhotoList" :key="index" @click="previewImage(item)"/>
           <image class="activity-img more" @click="showMore"/>
         </div>
       </div>
       <div class="text-wrap">
-        <div class="title">书院档案</div>
+        <!-- <div class="title">书院档案</div> -->
+        <image mode="widthFix" class="icon" src="../static/images/title2.png"/>
         <div class="content">
           <wx-template is="wxParse" data="{{wxParseData:article.nodes}}"/>
         </div>
@@ -134,6 +136,9 @@
     color:#666666;
     font-size: 28rpx;
     padding: 40rpx 0;
+  }
+  .icon{
+    width:221rpx;
   }
 }
 .activity-img{

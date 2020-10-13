@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="foot" v-if="obj.orderStatus !== 0">
-      <div class="btn" @click="question">问卷调查</div>
+      <!-- <div class="btn" @click="question">问卷调查</div> -->
       <div class="btn s2" @click="detail">查看详情</div>
     </div>
   </div>
@@ -37,7 +37,7 @@
        console.log(feedBackSel)
        if(!feedBackSel.feedBack){
           wx.navigateTo({
-           url:`/pages/my/question?orderid=${this.obj.orderId}`
+           url:`/pages/my/question?orderId=${this.obj.orderId}`
          })
        }else{
          this.$showToast("您已提交了问卷")
@@ -46,12 +46,12 @@
      async detail () {
        if(this.obj.orderType == -1){
         wx.navigateTo({
-          url:`/pages/appointSuccess?orderid=${this.obj.orderId}&userNike=${this.obj.userNike}&phonenumber=${this.obj.phonenumber}&number=${this.obj.number}&grade=${this.obj.grade}&activityTime=${this.obj.activityTime}`
+          url:`/pages/appointSuccess?orderId=${this.obj.orderId}&userNike=${this.obj.userNike}&phonenumber=${this.obj.phonenumber}&number=${this.obj.number}&grade=${this.obj.grade}&activityTime=${this.obj.activityTime}`
         })
        }
        if(this.obj.orderType == 1){
         wx.navigateTo({
-          url:`/pages/signUpSuccess?orderid=${this.obj.orderId}&userNike=${this.obj.userNike}&phonenumber=${this.obj.phonenumber}&number=${this.obj.number}&grade=${this.obj.grade}&activityTime=${this.obj.activityTime}`
+          url:`/pages/signUpSuccess?orderId=${this.obj.orderId}&userNike=${this.obj.userNike}&phonenumber=${this.obj.phonenumber}&number=${this.obj.number}&grade=${this.obj.grade}&activityTime=${this.obj.activityTime}`
         })
        }
      }

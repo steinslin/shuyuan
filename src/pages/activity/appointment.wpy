@@ -34,7 +34,8 @@
       <div class="item" v-for="(item, index) in formList" :key="index" @click="itemClick(index)">
         <div class="label">{{item.key}}</div>
         <input v-if="item.type == 1" type="text" class="input" :placeholder="'请填写'+item.key" placeholder-class="placeholder" v-model="item.value" maxlength="20"/>
-        <input v-if="item.type == 2 || item.type == 3" type="text" class="input" :placeholder="'请选择'+item.key" placeholder-class="placeholder" v-model="item.value" :disabled="true" maxlength="20"/>
+        <input v-if="item.type == 2" type="text" class="input" :placeholder="'请选择'+item.key" placeholder-class="placeholder" v-model="item.value" :disabled="true" maxlength="20"/>
+        <input v-if="item.type == 3" type="text" class="input" :placeholder="'请选择'+item.key" placeholder-class="placeholder" v-model="item.value" :disabled="true" maxlength="20"/>
       </div>
       <!-- <div class="item" @click="grade.show=true">
         <div class="label">年级(如含有学生请选择年级）</div>
@@ -60,7 +61,8 @@
       </div> -->
     </div>
     <van-popup position="bottom" :show="formList[formIndex].options.show" @close="formList[formIndex].options.show = false">
-      <van-picker 
+      <van-picker
+        v-if="formList[formIndex].type == 2" 
         :title="formList[formIndex].options.title" 
         :show-toolbar="true" 
         toolbar-position="top" 
@@ -69,6 +71,14 @@
         @cancel="formList[formIndex].options.show = false"
         @confirm="formList[formIndex].options.show = false"
       />
+      <div class="check-panel" v-if="formList[formIndex].type == 3">
+        <scroll-view class="check-list">
+          <van-checkbox-group :value="formList[formIndex].options.checked" @change="checkChange">
+            <van-checkbox :name="item" v-for="(item, index) in formList[formIndex].options.list" :key="index">{{item}}</van-checkbox>
+          </van-checkbox-group>
+        </scroll-view>
+      <div class="btn" @click="formList[formIndex].options.show = false">确定</div>
+      </div>
     </van-popup>
     <van-popup position="bottom" :show="lunch.show" @close="lunch.show = false">
       <van-picker 
@@ -178,7 +188,9 @@
        this.formIndex = index
      },
      checkChange (e) {
-       this.formList[this.formIndex].checked = e.$wx.detail
+       let checked = e.$wx.detail
+       this.formList[this.formIndex].options.checked = checked
+       this.$set(this.formList[this.formIndex],'value',checked.join(","))
      },
      numChange (e) {
        this.form.number = e.$wx.detail
@@ -227,14 +239,21 @@
             return
           }
          }
+         console.log(orderAdd.orderActivity.isSuccess,"是否审核")
+         if(orderAdd.orderActivity.isSuccess == 1){
+           wx.redirectTo({
+              url:`/pages/underReview?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
+            })
+            return
+         }
          if(this.detail.isPast == -1){
             wx.redirectTo({
-              url:`/pages/appointSuccess`,
+              url:`/pages/appointSuccess?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
             })
           }
           if(this.detail.isPast == 1){
             wx.redirectTo({
-              url:`/pages/signUpSuccess`
+              url:`/pages/signUpSuccess?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
             })
           }
        }else{
@@ -288,6 +307,7 @@
   .info{
     position: relative;
     margin-left: 40rpx;
+    width: 400rpx;
     .title{
       font-size: 30rpx;
       color:#343434;
