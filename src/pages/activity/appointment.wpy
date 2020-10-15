@@ -121,7 +121,12 @@
         show:true,
         value:null,
         type:1,
-        order:1
+        order:1,
+        validate:{
+          required:true,
+          type:"text",
+          hint:"请输入就读学校"
+        },
       },
       {
         id:2,
@@ -130,6 +135,11 @@
         value:'无',
         type:2,
         order:1,
+        validate:{
+          required:true,
+          type:"check",
+          hint:"请选择年级(如含有学生请选择年级）"
+        },
         options:{
           title:"年级选择",
           index:0,
@@ -144,6 +154,11 @@
         value:"官方微信公众号推荐",
         type:3,
         order:1,
+        validate:{
+          required:true,
+          type:"check",
+          hint:"请选择得知渠道来源"
+        },
         options:{
           title:"得知渠道来源",
           list:["官方微信公众号推荐", "官网网站推荐","学校活动（开放日、教育理想地、echo等）","在校生以及家长推荐","校友以及家长推荐","老师、朋友推荐","教育机构","展会","其它社交媒体"],
@@ -158,12 +173,17 @@
         value:"否",
         type:2,
         order:1,
+        validate:{
+          required:true,
+          type:"check",
+          hint:"请选择家长校园午餐体验（自费）"
+        },
         options:{
           title:"家长校园午餐体验",
           index:0,
           list:["否", "是"],
           show:false
-        }
+        },
       },
     {
         id:5,
@@ -171,7 +191,12 @@
         show:true,
         value:null,
         type:1,
-        order:1
+        order:1,
+        validate:{
+          required:true,
+          type:"email",
+          hint:"请输入合法的邮箱"
+        },
       },
     ],
     form:{
@@ -208,12 +233,37 @@
          this.$showToast("请填写联系人")
        }else if(this.form.contactsTel==""){
          this.$showToast("请填写联系电话")
+       }else if(!this.$utils.checkPhone(this.form.contactsTel)){
+         this.$showToast("请填写合法的联系电话")
        }else{
          return true
        }
+      //  else if(this.formList.length > 0){
+      //    let validate = false
+      //    this.formList.forEach((item, index) => {
+      //      if(item.validate){
+      //        validate = true
+      //      }else if(item.validate.required){
+      //        if(item.validate.type=="text" && item.value == null){
+      //          this.$showToast(item.validate.hint)
+      //          validate = true
+      //        }else if(item.validate.type=="email" && !validate){
+      //          if(!this.$utils.checkEmail(item.value)){
+      //            this.$showToast("请输入合法的邮箱")
+      //          }else{
+      //            validate = true
+      //          }
+      //        }
+      //      }
+      //    })
+      //    if(validate){
+      //      return true
+      //    }
+      //  }
      },
      async pay () {
        if(!this.validate()) return
+       console.log("提交成功")
        let token = (await this.$apis.getToken()).token
        let orderAdd = await this.$apis.orderActivityAdd({
          activityId:this.param.activityId,
@@ -239,8 +289,8 @@
             return
           }
          }
-         console.log(orderAdd.orderActivity.isSuccess,"是否审核")
-         if(orderAdd.orderActivity.isSuccess == 1){
+         console.log(this.detail.isReview,"是否审核")
+         if(this.detail.isReview == 1){
            wx.redirectTo({
               url:`/pages/underReview?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
             })
@@ -250,11 +300,13 @@
             wx.redirectTo({
               url:`/pages/appointSuccess?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
             })
+            return
           }
           if(this.detail.isPast == 1){
             wx.redirectTo({
               url:`/pages/signUpSuccess?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
             })
+            return
           }
        }else{
          this.$showToast(orderAdd.msg, 2000)
