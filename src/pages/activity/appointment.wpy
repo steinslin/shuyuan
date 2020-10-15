@@ -235,31 +235,32 @@
          this.$showToast("请填写联系电话")
        }else if(!this.$utils.checkPhone(this.form.contactsTel)){
          this.$showToast("请填写合法的联系电话")
+       }else if(this.formList.length > 0){
+         let validate = false,
+             completed = false
+         this.formList.forEach((item, index) => {
+           if(!item.validate){
+             validate = true
+           }else if(item.validate.required){
+             if(item.validate.type=="text" && item.value == null || item.value == "" ){
+               this.$showToast(item.validate.hint)
+               validate = true
+             }else if(item.validate.type=="email" && !validate){
+               console.log('validate',validate)
+               if(!this.$utils.checkEmail(item.value)){
+                 this.$showToast("请输入合法的邮箱")
+               }else{
+                 completed = true
+               }
+             }
+           }
+         })
+         if(completed){
+           return true
+         }
        }else{
          return true
        }
-      //  else if(this.formList.length > 0){
-      //    let validate = false
-      //    this.formList.forEach((item, index) => {
-      //      if(item.validate){
-      //        validate = true
-      //      }else if(item.validate.required){
-      //        if(item.validate.type=="text" && item.value == null){
-      //          this.$showToast(item.validate.hint)
-      //          validate = true
-      //        }else if(item.validate.type=="email" && !validate){
-      //          if(!this.$utils.checkEmail(item.value)){
-      //            this.$showToast("请输入合法的邮箱")
-      //          }else{
-      //            validate = true
-      //          }
-      //        }
-      //      }
-      //    })
-      //    if(validate){
-      //      return true
-      //    }
-      //  }
      },
      async pay () {
        if(!this.validate()) return
@@ -317,7 +318,7 @@
      console.log(param)
      let detail = await this.$apis.activityInfoSel(param.activityId)
      this.detail = detail.activityInfo
-     this.formList = JSON.parse(this.detail.activityFormJson)
+    //  this.formList = JSON.parse(this.detail.activityFormJson)
      this.param = param
    },
    onShareAppMessage (ops) {

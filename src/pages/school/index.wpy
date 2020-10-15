@@ -16,7 +16,7 @@
       <div class="item" :class="{on:tabIndex==index}" v-for="(item, index) in tabs" :key="index" @click="tabChange(index)">{{item}}</div>
     </div>
     <div class="list" v-if="tabIndex == 0">
-      <block v-if="activityList.length > 0">
+      <block v-if="activityList.length > 0 && item.isPast == -1">
         <image class="school" :src="item.activityImg" v-for="(item, index) in activityList" v-if="item.isPast == -1" :key="index" @click="appoint(item)"/>
       </block>
       <block v-else>
@@ -25,8 +25,8 @@
       <!-- <activity-item v-for="(item, index) in activityList" v-if="item.isPast == -1" :key="index" :obj="item" btnText="立即预约" :border="true"/> -->
     </div>
     <div class="list" v-if="tabIndex == 1">
-      <block v-if="activityList.length > 0">
-        <activity-item v-for="(item, index) in activityList" :key="index" :obj="item" btnText="立即报名" :border="true"/>
+      <block v-if="activityList.length > 0 && item.isPast == 1">
+        <activity-item v-for="(item, index) in activityList" v-if="item.isPast == 1" :key="index" :obj="item" btnText="立即报名" :border="true"/>
       </block>
       <block v-else>
         <image mode="widthFix" class="no-data" src="../../static/images/no-data.png"/>
