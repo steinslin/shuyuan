@@ -44,7 +44,7 @@
     </div>
     <van-popup position="bottom" :show="phoneShow" @close="phoneShow = false">
       <div class="phone-list">
-        <div class="item" v-for="(item, index) in phone" @click="makePhone(item)">{{item}}</div>
+        <div class="item" v-for="(item, index) in phone" :key="index" @click="makePhone(item)">{{item}}</div>
       </div>
     </van-popup>
   </div>

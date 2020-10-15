@@ -9,7 +9,7 @@
       <span class="text">查看详情</span>
       <image class="arrow-right" mode="widthFix" src="../static/images/arrow-right2.png"/>
     </div>
-  </div>
+  </navigator>
 </template>
 <script>
   import wepy from '@wepy/core'

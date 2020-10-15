@@ -30,7 +30,6 @@
               :src="item" />
         </view>
       </swiper-item>
-    </block>
     </swiper>
     <view class="bannerDots flex_c abs" v-if="list.length > 1">
       <view class="dot" 

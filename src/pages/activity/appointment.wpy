@@ -12,7 +12,7 @@
           </block>
           <block v-else>
             ￥<span class="num">{{detail.activityPrice}}</span>/人
-          <block>
+          </block>
         </div>
       </div>
     </div>
