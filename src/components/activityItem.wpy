@@ -8,6 +8,7 @@
       <div class="btn disabled" v-if="nowTime >= obj.endTime">活动已结束</div>
       <div class="btn disabled" v-else-if="nowTime > obj.deadline">报名已结束</div>
       <div class="btn disabled" v-else-if="nowTime < obj.activityBeginTime">报名未开始</div>
+      <div class="btn disabled" v-else-if="obj.participateNumber >= obj.participateNumberTotal">报名已满</div>
       <div class="btn" v-else-if="nowTime >= obj.activityBeginTime">{{btnText}}</div>
       <!-- <div class="btn" v-if="nowTime >= obj.activityBeginTime && nowTime < obj.endTime" :style="{bottom:(border?'0':'20rpx')}">{{btnText}}</div>
       <div class="btn disabled" v-else-if="nowTime < obj.activityBeginTime" :style="{bottom:(border?'0':'20rpx')}">报名未开始</div>

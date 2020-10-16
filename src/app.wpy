@@ -27,6 +27,7 @@ wepy.app({
     }   
     this.__proto__.__proto__.$apis = apis;
     this.__proto__.__proto__.$dayjs = dayjs;
+    this.__proto__.__proto__.$utils = utils_baby 
     this.__proto__.__proto__.$showToast = (title, duration = 2000) => {
       wx.showToast({
         title,
