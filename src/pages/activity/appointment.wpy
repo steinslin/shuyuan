@@ -296,6 +296,17 @@
             return
           }
          }
+        //  模板消息推送
+         wx.requestSubscribeMessage({
+          tmplIds: ['yGO4JvBF04090avT3s49bKhO0xJYiWEbAutwfbZ5wIw','f7qXH1OGa4pNyPQ5orCzBX4hZ55NVyeCUVbsfjH_9X8','Z55ug4fcp9WXdITrnOTab7Cdx-2yZQLqtNJ2rg6uC4E'],
+          success (res) { 
+            if(res.errMsg == 'requestSubscribeMessage:ok'){
+              console.log("订阅成功!")
+            }else{
+              console.log("订阅失败!")
+            }
+          }
+        })
          console.log(this.detail.isReview,"是否审核")
          if(this.detail.isReview == 1){
            wx.redirectTo({
@@ -323,7 +334,10 @@
    async onLoad (param) {
      console.log(param)
      let detail = await this.$apis.activityInfoSel(param.activityId)
+     let userInfo = await this.$apis.userInfo({})
      this.detail = detail.activityInfo
+     this.form.contactsTel = userInfo.vipInfo.phonenumber
+     this.form.contacts = userInfo.vipInfo.userNike
      this.formList = JSON.parse(this.detail.activityFormJson)
      this.param = param
    },

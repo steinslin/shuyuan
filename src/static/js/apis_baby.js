@@ -149,6 +149,15 @@ let apis_baby = {
       data
     }).getData()
   },
+  // 用户信息
+  async userInfo (data) {
+    return await new Api({
+      url:`/linli/user/getVipInfo`,
+      method:"GET",
+      msg:"加载中..",
+      data
+    }).getData()
+  },
   // 支付
   async wxPay(param, type) {
     // console.log(param)
