@@ -31,7 +31,7 @@
           <van-stepper :max="detail.number" :value="form.number" @change="numChange"/>
         </div>
       </div>
-      <div class="item" v-for="(item, index) in formList" :key="index" @click="itemClick(index)">
+      <div class="item" v-for="(item, index) in formList" v-if="item.show" :key="index" @click="itemClick(index)">
         <div class="label">{{item.key}}</div>
         <input v-if="item.type == 1" type="text" class="input" :placeholder="'请填写'+item.key" placeholder-class="placeholder" v-model="item.value" maxlength="20"/>
         <input v-if="item.type == 2" type="text" class="input" :placeholder="'请选择'+item.key" placeholder-class="placeholder" v-model="item.value" :disabled="true" maxlength="20"/>
@@ -241,7 +241,7 @@
          for(let index=0;index<this.formList.length;index++){
            let item = this.formList[index]
            console.log(item.key,item.value)
-           if(item.validate.required){
+           if(item.show && item.validate.required){
              if(item.value == "" || item.value == null){
                this.$showToast(item.validate.hint)
                num ++

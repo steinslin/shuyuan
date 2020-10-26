@@ -114,10 +114,18 @@
         this.dateTime = `${selectedDate.year}-${selectedDate.month}-${selectedDate.day}`
         let activityList = await this.$apis.activityInfoList({
           //  activityType: this.navList[this.tabIndex].navType
-          isPast:(this.tabIndex==0)?-1:1,
+          // isPast:(this.tabIndex==0)?-1:1,
           startTime:this.dateTime
         })
         this.activityList = activityList.rows
+        this.activityList.forEach((item, index)=>{
+          if(item.isPast == -1){
+            this.tabIndex = 0
+            return
+          }else{
+            this.tabIndex = 1
+          }
+        })
       },
       afterCalendarRender: async () => {
         this.renderCurMonthMark(this, this.$dayjs().format("YYYY-MM-01"))

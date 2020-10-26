@@ -24,6 +24,7 @@
       </div>
       <div class="text-content">
         <wx-template is="wxParse" data="{{wxParseData:article2.nodes}}"/>
+        <!-- <rich-text nodes="{{detail.activityDesc}}"></rich-text> -->
         <!-- <rich-text :nodes="detail.activityDesc"/> -->
       </div>
     </div>
@@ -77,14 +78,14 @@ wepy.page({
   async onLoad (param) {
     this.phone = (await this.$apis.agreementView({type:2})).agreement.context.split(",")
     this.wechat = (await this.$apis.agreementView({type:3})).agreement
-    WxParse.wxParse('article', 'html', this.wechat.context, this.$wx, 0)
+    WxParse.wxParse('article', 'html', this.wechat.context, this.$wx, 5)
     let detail = await this.$apis.activityInfoSel(param.activityId)
     console.log(param)
     this.param = param
     this.detail = detail.activityInfo
     this.detail.nowTime = this.$dayjs().format("YYYY-MM-DD HH:mm:ss")
     console.log(this.detail,"detail")
-    WxParse.wxParse('article2', 'html', this.detail.activityDesc.replaceAll("<o:p>",""), this.$wx, 0)
+    WxParse.wxParse('article2', 'html', this.detail.activityDesc.replaceAll("<o:p>",""), this.$wx, 5)
   },
   async onPullDownRefresh () {
     this.$wx.onLoad()
@@ -178,6 +179,7 @@ wepy.page({
   view,
   image{
     width:100% !important;
+    transform: translateZ(0);
   }
 }
 .dialog{
