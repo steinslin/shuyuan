@@ -34,6 +34,7 @@
     "babel-eslint": "^7.2.1",
     "cross-env": "^5.1.3",
     "less": "^3.8.1",
-    "mini-program-iconfont-cli": "^0.5.5"
+    "mini-program-iconfont-cli": "^0.5.5",
+    "parser-wx": "^1.1.0"
   }
 }

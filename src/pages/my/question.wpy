@@ -61,7 +61,7 @@
      async submit () {
        let feedBackAdd = await this.$apis.feedBackAdd({
          feedBack: JSON.stringify(this.question),
-         orderId: this.param.orderid
+         orderId: this.param.orderId
        })
        if(feedBackAdd.code == 0){
          this.$showToast("提交成功")
