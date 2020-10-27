@@ -10,8 +10,11 @@
       <van-tab title="已报名">
         <activity-order-item :obj="item" v-if="item.orderStatus == 1" v-for="(item, index) in orderList" :key="index"/>
       </van-tab>
+      <van-tab title="已签到">
+        <activity-order-item :obj="item" v-if="item.orderStatus == 2 || item.orderStatus == 3" v-for="(item, index) in orderList" :key="index"/>
+      </van-tab>
       <van-tab title="已结束">
-        <activity-order-item :obj="item" v-if="item.orderStatus == 3" v-for="(item, index) in orderList" :key="index"/>
+        <activity-order-item :obj="item" v-if="item.orderStatus == 5" v-for="(item, index) in orderList" :key="index"/>
       </van-tab>
       <van-tab title="已取消">
         <activity-order-item :obj="item" v-if="item.orderStatus == -1" v-for="(item, index) in orderList" :key="index"/>

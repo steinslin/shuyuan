@@ -33,7 +33,8 @@ wepy.component({
   },
   ready () {
     this.nowTime = this.$dayjs().format("YYYY-MM-DD HH:mm:ss")
-    console.log(this.nowTime < this.obj.activityBeginTime,this.nowTime,this.obj.activityBeginTime)
+    console.log("活动是否结束",this.nowTime >= this.obj.endTime,this.nowTime,this.obj.endTime)
+    // console.log(this.nowTime < this.obj.activityBeginTime,this.nowTime,this.obj.activityBeginTime)
   }
 })
 </script>

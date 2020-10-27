@@ -296,36 +296,41 @@
             return
           }
          }
+         console.log("模板推送")
         //  模板消息推送
          wx.requestSubscribeMessage({
-          tmplIds: ['yGO4JvBF04090avT3s49bKhO0xJYiWEbAutwfbZ5wIw','f7qXH1OGa4pNyPQ5orCzBX4hZ55NVyeCUVbsfjH_9X8','Z55ug4fcp9WXdITrnOTab7Cdx-2yZQLqtNJ2rg6uC4E'],
-          success (res) { 
+          tmplIds: ['Z55ug4fcp9WXdITrnOTabwIYMp2uvGSSmYf6ZCAydPU','yGO4JvBF04090avT3s49bKhO0xJYiWEbAutwfbZ5wIw','f7qXH1OGa4pNyPQ5orCzBX4hZ55NVyeCUVbsfjH_9X8'],
+          success:(res)=> { 
+            console.log("模板成功消息",res)
             if(res.errMsg == 'requestSubscribeMessage:ok'){
               console.log("订阅成功!")
             }else{
               console.log("订阅失败!")
             }
+            console.log(this.detail.isReview,"是否审核")
+            if(this.detail.isReview == 1){
+              wx.redirectTo({
+                url:`/pages/underReview?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
+              })
+              return
+            }
+            if(this.detail.isPast == -1){
+              wx.redirectTo({
+                url:`/pages/appointSuccess?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
+              })
+              return
+            }
+            if(this.detail.isPast == 1){
+              wx.redirectTo({
+                url:`/pages/signUpSuccess?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
+              })
+              return
+            }
+          },
+          fail (err) {
+            console.log("模板发送失败",err)
           }
         })
-         console.log(this.detail.isReview,"是否审核")
-         if(this.detail.isReview == 1){
-           wx.redirectTo({
-              url:`/pages/underReview?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
-            })
-            return
-         }
-         if(this.detail.isPast == -1){
-            wx.redirectTo({
-              url:`/pages/appointSuccess?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
-            })
-            return
-          }
-          if(this.detail.isPast == 1){
-            wx.redirectTo({
-              url:`/pages/signUpSuccess?orderId=${orderAdd.orderId}&userNike=${this.form.contactsTel}&phonenumber=${this.form.contacts}&number=${orderAdd.orderActivity.number}`
-            })
-            return
-          }
        }else{
          this.$showToast(orderAdd.msg, 2000)
        }
