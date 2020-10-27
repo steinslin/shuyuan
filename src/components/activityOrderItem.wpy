@@ -51,6 +51,20 @@
           })
           return
        }
+       if(this.obj.orderStatus == 2 || this.obj.orderStatus == 3){
+         if(this.obj.orderType == -1){
+            wx.navigateTo({
+              url:`/pages/school/detail?activityId=${this.obj.activityId}`
+            })
+            return
+         }
+         if(this.obj.orderType == 1){
+            wx.navigateTo({
+              url:`/pages/activity/detail?activityId=${this.obj.activityId}`
+            })
+            return
+         }
+       }
        if(this.obj.orderType == -1){
         wx.navigateTo({
           url:`/pages/appointSuccess?orderId=${this.obj.orderId}&userNike=${this.obj.userNike}&phonenumber=${this.obj.phonenumber}&number=${this.obj.number}&grade=${this.obj.grade}&activityTime=${this.obj.activityTime}`

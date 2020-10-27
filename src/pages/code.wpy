@@ -65,6 +65,17 @@
        })
        if(activitySign.code == 0){
          this.sign = true
+         wx.requestSubscribeMessage({
+          tmplIds: ['f7qXH1OGa4pNyPQ5orCzBX4hZ55NVyeCUVbsfjH_9X8'],
+          success:(res)=> { 
+            console.log("模板成功消息",res)
+            if(res.errMsg == 'requestSubscribeMessage:ok'){
+              console.log("订阅成功!")
+            }else{
+              console.log("订阅失败!")
+            }
+          }
+         })
        }else{
         this.$showToast(activitySign.msg)
        }
