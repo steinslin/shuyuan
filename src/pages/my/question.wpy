@@ -66,9 +66,9 @@
    },
    methods:{
      radioCheck (index, idx) {
-      console.log(index, idx,this.question[index].key)
+      // console.log(index, idx,this.question[index].key)
       this.$set(this.question[index],'index',idx)
-      this.$set(this.question[index],'value',this.question[index].list[idx])
+      // this.$set(this.question[index],'value',this.question[index].list[idx])
       // this.question[index].index = idx
       // this.question[index].value = this.question[index].list[idx]
      },
