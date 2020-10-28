@@ -1,12 +1,12 @@
 export default class Api {
   constructor(obj) {
     // this.host = '192.168.0.199';
-    // this.host = '120.79.41.141';
+    this.host = '120.79.41.141';
     // this.host = "app.pm.yinsitan.cn";
-    this.host = 'app.meisha.yinsitan.cn'
-    // this.port = "8586";
-    // this.baseUrl = "http://" + this.host + (this.port ? (":" + this.port) : "");
-    this.baseUrl = "https://" + this.host + (this.port ? (":" + this.port) : "");
+    // this.host = 'app.meisha.yinsitan.cn'
+    this.port = "8586";
+    this.baseUrl = "http://" + this.host + (this.port ? (":" + this.port) : "");
+    // this.baseUrl = "https://" + this.host + (this.port ? (":" + this.port) : "");
     this.appid =  "wx2a1b10b5cf6adaff";
     this.limit = 10000;
     this.url = "";
@@ -79,7 +79,8 @@ export default class Api {
   async getData() {
     wx.showNavigationBarLoading()
     this.msg && wx.showLoading({
-      title: this.msg
+      title: this.msg,
+      mask: true
     })
 
     let timer = ""

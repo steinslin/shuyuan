@@ -1,15 +1,15 @@
 <template>
   <div class="page">
     <image class="show" mode="widthFix" src="../../static/images/question.png"/>
-    <div class="panel" v-for="(item, index) in question" :key="index">
+    <div class="panel" v-for="(item, idex) in question" :key="idex">
       <block v-if="item.type == 'radio'">
         <div class="head">
-          <span class="title">{{index+1+'.'+item.key}}</span>
+          <span class="title">{{idex+1+'.'+item.key}}</span>
           <!-- <span class="status fr">{{item.type=="radio"}}</span> -->
         </div>
         <div class="content">
-          <div class="check-wrap" v-for="(itm, idx) in item.list" :key="idx">
-            <div class="item" @click.stop="radioCheck(index, idx)">
+          <div class="check-wrap" @click.stop="radioCheck(item, idex, idx)" v-for="(itm, idx) in item.list" :key="idx">
+            <div class="item">
               <div class="circle" :class="{on:item.index == idx}"></div>
               <div class="text">{{itm}}</div>
             </div>
@@ -18,7 +18,7 @@
       </block>
       <block v-if="item.type == 'textarea'">
         <div class="head">
-          <span class="title">{{index+1+'.'+item.key}}</span>
+          <span class="title">{{idex+1+'.'+item.key}}</span>
           <!-- <span class="status fr">单选</span> -->
         </div>
         <div class="content">
@@ -65,10 +65,11 @@
      }]
    },
    methods:{
-     radioCheck (index, idx) {
+     radioCheck (item, index, idx) {
+      console.log(this.question[index])
       // console.log(index, idx,this.question[index].key)
       this.$set(this.question[index],'index',idx)
-      // this.$set(this.question[index],'value',this.question[index].list[idx])
+      this.$set(this.question[index],'value',this.question[index].list[idx])
       // this.question[index].index = idx
       // this.question[index].value = this.question[index].list[idx]
      },
@@ -89,7 +90,11 @@
    },
    onLoad (param) {
      this.param = param
-   }
+   },
+   async onPullDownRefresh () {
+     this.$wx.onLoad()
+     wx.stopPullDownRefresh()
+   },
   });
 </script>
 <style lang="less" scoped>
@@ -188,6 +193,7 @@ module.exports.getTime = getTime;
 </wxs>
 <config>
 {
+    "enablePullDownRefresh": true,
     "navigationBarTitleText":"问卷调查",
     "usingComponents": {
       
