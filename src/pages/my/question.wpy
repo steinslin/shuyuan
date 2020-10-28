@@ -2,29 +2,29 @@
   <div class="page">
     <image class="show" mode="widthFix" src="../../static/images/question.png"/>
     <div class="panel" v-for="(item, index) in question" :key="index">
-      <template v-if="item.type == 'radio'">
+      <block v-if="item.type == 'radio'">
         <div class="head">
-          <span class="title">{{item.title}}</span>
+          <span class="title">{{index+1+'.'+item.key}}</span>
           <!-- <span class="status fr">{{item.type=="radio"}}</span> -->
         </div>
         <div class="content">
           <div class="check-wrap" v-for="(itm, idx) in item.list" :key="idx">
-            <div class="item" @click="radioCheck(index, idx)">
+            <div class="item" @click.stop="radioCheck(index, idx)">
               <div class="circle" :class="{on:item.index == idx}"></div>
               <div class="text">{{itm}}</div>
             </div>
           </div>
         </div>
-      </template>
-      <template v-if="item.type == 'textarea'">
+      </block>
+      <block v-if="item.type == 'textarea'">
         <div class="head">
-          <span class="title">{{item.title}}</span>
+          <span class="title">{{index+1+'.'+item.key}}</span>
           <!-- <span class="status fr">单选</span> -->
         </div>
         <div class="content">
-          <textarea class="advice" :value="item.value" placeholder="请写下你想对万科梅沙书院说的建议"/>
+          <textarea class="advice" v-model="item.value" placeholder="请写下你想对万科梅沙书院说的建议"/>
         </div>
-      </template>
+      </block>
     </div>
     <div class="submit" @click="submit">提交问卷</div>
   </div>
@@ -35,28 +35,42 @@
    data:{
      param:{},
      question:[{
+       id:1,
        type:"radio",
-       title:"1. 你对本次活动的满意程度？",
+       key:"你对本次活动的满意程度？",
        list:["十分满意","满意","一般","不满意"],
-       index:0
+       index:0,
+       value:"十分满意",
+       show:true
      },{
+       id:2,
        type:"radio",
-       title:"2. 本次活动你最喜欢哪个环节？",
+       key:"本次活动你最喜欢哪个环节？",
        list:["讲座","校园参观","体验课","午餐体验","节目表演"],
-       index:0
+       index:0,
+       value:"讲座",
+       show:true
      },{
+       id:3,
        type:"textarea",
-       title:"3. 你对本次活动建议（如有）？",
-       value:""
+       key:"你对本次活动建议（如有）？",
+       value:"",
+       show:true
      },{
+       id:4,
        type:"textarea",
-       title:"4. 你理想的高中是哪所学校呢？（原因）",
-       value:""
+       key:"你理想的高中是哪所学校呢？（原因）",
+       value:"",
+       show:true
      }]
    },
    methods:{
      radioCheck (index, idx) {
-       this.question[index].index = idx
+      // console.log(index, idx,this.question[index].key)
+      this.$set(this.question[index],'index',idx)
+      // this.$set(this.question[index],'value',this.question[index].list[idx])
+      // this.question[index].index = idx
+      // this.question[index].value = this.question[index].list[idx]
      },
      async submit () {
        let feedBackAdd = await this.$apis.feedBackAdd({

@@ -50,6 +50,7 @@
      this.activityList = activityList.rows
    },
    async onPullDownRefresh () {
+     this.activityList = []
      this.$wx.onLoad()
      wx.stopPullDownRefresh()
    },
