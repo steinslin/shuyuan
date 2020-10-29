@@ -1,14 +1,14 @@
 export default class Api {
   constructor(obj) {
     // this.host = '192.168.0.199';
-    this.host = '120.79.41.141';
+    // this.host = '120.79.41.141';
     // this.host = "app.pm.yinsitan.cn";
-    // this.host = 'app.meisha.yinsitan.cn'
-    this.port = "8586";
-    this.baseUrl = "http://" + this.host + (this.port ? (":" + this.port) : "");
-    // this.baseUrl = "https://" + this.host + (this.port ? (":" + this.port) : "");
+    this.host = 'app.meisha.yinsitan.cn'
+    // this.port = "8586";
+    // this.baseUrl = "http://" + this.host + (this.port ? (":" + this.port) : "");
+    this.baseUrl = "https://" + this.host + (this.port ? (":" + this.port) : "");
     this.appid =  "wx2a1b10b5cf6adaff";
-    this.limit = 10000;
+    this.limit = 4000;
     this.url = "";
     this.data = "";
     this.method = "POST";
@@ -53,10 +53,10 @@ export default class Api {
         method: this.method.toUpperCase(),
         success: async (res) => {
           if(res && res.data.code != "40008"){
-            console.log("请求成功")
+            console.log("请求成功",res)
             resolve(res)
           }else{
-            console.log("请求失败",await this.getToken())
+            console.log("请求失败",await this.getToken(),res)
             // wx.showToast({
             //   title: '登录失败',
             //   icon: 'none',
@@ -68,9 +68,13 @@ export default class Api {
             reject("请求错误",res)
           }
         },
-        fail(err) {
-          console.log('请求无响应:'+err)
-          reject("请求无响应:",err)
+        fail: async(err) => {
+          token = await this.getToken()
+          console.log("fail:",token)
+          wx.setStorageSync('token', token);
+          this.page.reload()
+          console.log('请求超时:'+JSON.stringify(err),"token",token)
+          reject("请求超时:",err)
         }
       })
     })
@@ -83,21 +87,26 @@ export default class Api {
       mask: true
     })
 
-    let timer = ""
-
-    let result = (await this.ajax()).data;
+    let timer = "",
+    result = ""
+    try{
+      result = (await this.ajax()).data;
+    }catch(err){
+      console.log(err)
+    }
     if (result) {
       this.msg && wx.hideLoading()
       wx.hideNavigationBarLoading()
       clearTimeout(timer);
       return result;
     }else{
+      console.log("请求超时")
       timer = setTimeout(() => {
-        wx.showToast({
-          title: '请求超时!',
-          icon: 'none',
-          duration: 2000
-        })
+        // wx.showToast({
+        //   title: '请求超时!',
+        //   icon: 'none',
+        //   duration: 2000
+        // })
         this.msg && wx.hideLoading()
         wx.hideNavigationBarLoading()
         return

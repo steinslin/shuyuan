@@ -16,7 +16,7 @@
         <span>联系我们</span>
         <image class="icon" mode="widthFix" src="../../static/images/wechat.png" @click="wachatShow=true"/>
         <image class="icon" mode="widthFix" src="../../static/images/phone.png" @click="phoneShow = true"/>
-        <div class="btn disabled fr" v-if="detail.nowTime >= detail.endTime">活动已结束</div>
+        <div class="btn disabled fr" v-if="detail.activityState == -1">活动已结束</div>
         <div class="btn disabled fr" v-else-if="detail.nowTime > detail.deadline">报名已结束</div>
         <div class="btn disabled fr" v-else-if="detail.nowTime < detail.activityBeginTime">报名未开始</div>
         <div class="btn disabled" v-else-if="detail.participateNumber >= detail.participateNumberTotal">报名已满</div>

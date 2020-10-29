@@ -22,7 +22,7 @@
           <!-- <span class="status fr">单选</span> -->
         </div>
         <div class="content">
-          <textarea class="advice" v-model="item.value" placeholder="请写下你想对万科梅沙书院说的建议"/>
+          <textarea class="advice" v-model="item.value"/>
         </div>
       </block>
     </div>
