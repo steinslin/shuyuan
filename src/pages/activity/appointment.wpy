@@ -101,7 +101,8 @@
         <div class="btn" @click="source.show = false">确定</div>
       </div>
     </van-popup>
-    <div class="submit" v-if="detail.isPast==-1" @click="pay">确认预约</div>
+    <div class="submit" v-if="detail.isPast==-1 && detail.activityState == 0" @click="pay">确认预约</div>
+    <div class="submit disabled" v-if="detail.isPast==-1 && detail.activityState !== 0">确认预约</div>
     <shop-bar :price="detail.activityPrice * form.number" @pay="pay" v-if="detail.isPast==1"/>
   </div>
 </template>
@@ -337,14 +338,14 @@
      }
    },
    async onLoad (param) {
-     console.log(param)
+     this.param = param || this.param
+     console.log(this.param)
      let detail = await this.$apis.activityInfoSel(param.activityId)
      let userInfo = await this.$apis.userInfo({})
      this.detail = detail.activityInfo
      this.form.contactsTel = userInfo.vipInfo.phonenumber
      this.form.contacts = userInfo.vipInfo.userNike
      this.formList = JSON.parse(this.detail.activityFormJson)
-     this.param = param
    },
    onShareAppMessage (ops) {
     if (ops.from === 'button') {
@@ -458,6 +459,9 @@
   color:#fff;
   background: #3B8DB5;
   border-radius: 49rpx;
+  &.disabled{
+    background: #999 !important;
+  }
 }
 .placeholder{
   color:#9a9a9a;
