@@ -74,6 +74,9 @@ wepy.app({
       "backgroundColor": "#eeeeee",
       "backgroundTextStyle": "light"
     },
+    networkTimeout:{
+      request:100000
+    },
     usingComponents:{
       
     },

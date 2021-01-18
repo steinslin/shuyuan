@@ -8,11 +8,12 @@ export default class Api {
     this.baseUrl = "http://" + this.host + (this.port ? (":" + this.port) : "");
     // this.baseUrl = "https://" + this.host + (this.port ? (":" + this.port) : "");
     this.appid =  "wx2a1b10b5cf6adaff";
-    this.limit = 1000;
+    this.limit = 5000;
     this.url = "";
     this.data = "";
     this.method = "POST";
     this.msg = "";
+    this.refreshLogin = false
     this.page = {
       /**
        * @description: 页面刷新
@@ -52,63 +53,84 @@ export default class Api {
         },
         method: this.method.toUpperCase(),
         success: async (res) => {
+          console.log("请求",res)
           if(res && res.data.code != "40008"){
             console.log("请求成功")
             resolve(res)
           }else{
             // console.log("请求失败",await this.getToken())
-            // wx.showToast({
-            //   title: '登录失败',
-            //   icon: 'none',
-            //   duration: 2000
-            // })
             token = await this.getToken()
             wx.setStorageSync('token', token);
+            console.log("token成功",token)
+            // try{
+            // token = await this.getToken()
+            // console.log("token成功",token)
+            // }catch(err){
+            //   console.log("token错误",err)
+            // }
+            // wx.setStorageSync('token', token);
+            resolve("登录失败")
             // this.page.reload()
-            reject(res.msg)
+            // setTimeout(async() => {
+            //   token = await this.getToken()
+            //   wx.setStorageSync('token', token);
+            //   this.page.reload()
+            //   reject("请求错误",res)
+            // },1000)
           }
         },
         fail(err) {
           console.log('请求无响应:'+err)
-          reject("请求超时")
+          reject("请求错误")
         }
       })
     })
     return result
   }
   async getData() {
-    wx.showNavigationBarLoading()
-    this.msg && wx.showLoading({
+    // wx.showNavigationBarLoading()
+    wx.showLoading({
       title: this.msg,
       mask: true
     })
 
     let timer = ""
-    let result = "",
-    errMsg = ""
-    try {
-      result = (await this.ajax()).data;
-    }catch(err){
-      console.log("getData err",errMsg)
-      errMsg = err
-    }
-    if (result) {
-      this.msg && wx.hideLoading()
-      wx.hideNavigationBarLoading()
+    try{
+      let result = (await this.ajax()).data;
+      wx.hideLoading()
+      // wx.hideNavigationBarLoading()
       clearTimeout(timer);
       return result;
-    }else{
-      // timer = setTimeout(() => {
+    }catch(err){
+      console.log("请求错误",err)
+      timer = setTimeout(() => {
         wx.showToast({
-          title: errMsg,
+          title: '请求超时!',
           icon: 'none',
           duration: 2000
         })
-        this.msg && wx.hideLoading()
-        wx.hideNavigationBarLoading()
+        wx.hideLoading()
+        // wx.hideNavigationBarLoading()
         return
-      // }, this.limit)
+      }, this.limit)
     }
+    // if (result) {
+    //   this.msg && wx.hideLoading()
+    //   wx.hideNavigationBarLoading()
+    //   clearTimeout(timer);
+    //   return result;
+    // }else{
+    //   timer = setTimeout(() => {
+    //     wx.showToast({
+    //       title: '请求超时!',
+    //       icon: 'none',
+    //       duration: 2000
+    //     })
+    //     this.msg && wx.hideLoading()
+    //     wx.hideNavigationBarLoading()
+    //     return
+    //   }, this.limit)
+    // }
 
 
   }
@@ -118,6 +140,7 @@ export default class Api {
     return new Promise((resolve, reject) => {
       wx.login({
         success(res) {
+          console.log("wx.login",res)
           let {code} = res;
           wx.request({
             url : `${_this.baseUrl}/weixinpay/GetOpenId`,
@@ -134,24 +157,22 @@ export default class Api {
               resolve(token)
             },
             fail(err){
-              console.log("getToken请求超时")
               wx.showToast({
-                title: '请求超时,请下拉刷新',
+                title: '微信登录失败',
                 icon: 'none',
                 duration: 2000
               })
-              reject()
+              reject("微信登录失败!",err)
             },
           })
         },
         fail(err) {
-          console.log("wx.login请求超时")
           wx.showToast({
-            title: '请求超时,请下拉刷新',
+            title: '微信Login失败',
             icon: 'none',
             duration: 2000
           })
-          reject()
+          reject("微信登录失败!",err)
         }
       })
     })

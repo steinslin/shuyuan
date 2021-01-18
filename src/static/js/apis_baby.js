@@ -198,6 +198,9 @@ let apis_baby = {
       method:"GET",
     }).getData()
   },
+  async getOpenId () {
+    return await new Api().getToken()
+  }
   
 };
 module.exports = apis_baby;

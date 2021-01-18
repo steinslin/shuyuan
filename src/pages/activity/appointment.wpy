@@ -151,7 +151,7 @@
         id:3,
         key:"得知渠道来源",
         show:true,
-        value:"官方微信公众号推荐",
+        value:"",
         type:3,
         order:1,
         validate:{
@@ -338,13 +338,26 @@
    },
    async onLoad (param) {
      console.log(param)
+    //  await this.$apis.getOpenId()
+     try{
+     this.param = param
      let detail = await this.$apis.activityInfoSel(param.activityId)
      let userInfo = await this.$apis.userInfo({})
      this.detail = detail.activityInfo
      this.form.contactsTel = userInfo.vipInfo.phonenumber
      this.form.contacts = userInfo.vipInfo.userNike
      this.formList = JSON.parse(this.detail.activityFormJson)
-     this.param = param
+     }catch(err){
+       wx.showToast({
+          title: '请求错误,请下拉刷新',
+          icon: 'none',
+          duration: 2000
+        })
+     }
+   },
+  async onPullDownRefresh () {
+     this.$wx.onLoad(this.param)
+     wx.stopPullDownRefresh()
    },
    onShareAppMessage (ops) {
     if (ops.from === 'button') {
@@ -503,6 +516,7 @@ module.exports.getTime = getTime;
       "van-checkbox-group": "module:@vant/weapp/dist/checkbox-group/index",
       "activity-item": "../../components/activityItem",
       "shop-bar":"../../components/shopBar"
-    }
+    },
+    enablePullDownRefresh: true,
 }
 </config>
