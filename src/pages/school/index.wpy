@@ -103,7 +103,7 @@
         url:`/pages/activity/appointment?activityId=${item.activityId}`
       })
       // wx.navigateTo({
-      //   url:`/pages/activity/detail?activityid=${item.activityId}&ispast=${item.isPast}`
+      //   url:`/pages/activity/detail?activityId=${item.activityId}&ispast=${item.isPast}`
       // })
     }
    },

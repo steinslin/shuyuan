@@ -8,7 +8,11 @@ export default class Api {
     this.baseUrl = "http://" + this.host + (this.port ? (":" + this.port) : "");
     // this.baseUrl = "https://" + this.host + (this.port ? (":" + this.port) : "");
     this.appid =  "wx2a1b10b5cf6adaff";
+<<<<<<< HEAD
     this.limit = 1000;
+=======
+    this.limit = 4000;
+>>>>>>> 5c97413e9a9602f58d3cca0fd54ed182ebe5c697
     this.url = "";
     this.data = "";
     this.method = "POST";
@@ -53,10 +57,14 @@ export default class Api {
         method: this.method.toUpperCase(),
         success: async (res) => {
           if(res && res.data.code != "40008"){
-            console.log("请求成功")
+            console.log("请求成功",res)
             resolve(res)
           }else{
+<<<<<<< HEAD
             // console.log("请求失败",await this.getToken())
+=======
+            console.log("请求失败",await this.getToken(),res)
+>>>>>>> 5c97413e9a9602f58d3cca0fd54ed182ebe5c697
             // wx.showToast({
             //   title: '登录失败',
             //   icon: 'none',
@@ -68,9 +76,19 @@ export default class Api {
             reject(res.msg)
           }
         },
+<<<<<<< HEAD
         fail(err) {
           console.log('请求无响应:'+err)
           reject("请求超时")
+=======
+        fail: async(err) => {
+          token = await this.getToken()
+          console.log("fail:",token)
+          wx.setStorageSync('token', token);
+          this.page.reload()
+          console.log('请求超时:'+JSON.stringify(err),"token",token)
+          reject("请求超时:",err)
+>>>>>>> 5c97413e9a9602f58d3cca0fd54ed182ebe5c697
         }
       })
     })
@@ -83,6 +101,7 @@ export default class Api {
       mask: true
     })
 
+<<<<<<< HEAD
     let timer = ""
     let result = "",
     errMsg = ""
@@ -91,6 +110,14 @@ export default class Api {
     }catch(err){
       console.log("getData err",errMsg)
       errMsg = err
+=======
+    let timer = "",
+    result = ""
+    try{
+      result = (await this.ajax()).data;
+    }catch(err){
+      console.log(err)
+>>>>>>> 5c97413e9a9602f58d3cca0fd54ed182ebe5c697
     }
     if (result) {
       this.msg && wx.hideLoading()
@@ -98,12 +125,22 @@ export default class Api {
       clearTimeout(timer);
       return result;
     }else{
+<<<<<<< HEAD
       // timer = setTimeout(() => {
         wx.showToast({
           title: errMsg,
           icon: 'none',
           duration: 2000
         })
+=======
+      console.log("请求超时")
+      timer = setTimeout(() => {
+        // wx.showToast({
+        //   title: '请求超时!',
+        //   icon: 'none',
+        //   duration: 2000
+        // })
+>>>>>>> 5c97413e9a9602f58d3cca0fd54ed182ebe5c697
         this.msg && wx.hideLoading()
         wx.hideNavigationBarLoading()
         return

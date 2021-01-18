@@ -52,14 +52,14 @@ wepy.page({
     },
     signUp () {
       wx.navigateTo({
-        url:`/pages/activity/appointment?activityid=${this.param.activityid}`
+        url:`/pages/activity/appointment?activityId=${this.param.activityId}`
       })
     }
   },
   async onLoad (param) {
     this.phone = await this.$apis.agreementView({type:2}).agreement
     this.wechat = await this.$apis.agreementView({type:3}).agreement
-    let detail = await this.$apis.activityInfoSel(param.activityid)
+    let detail = await this.$apis.activityInfoSel(param.activityId)
     this.param = param
     this.detail = detail.activityInfo
     WxParse.wxParse('article', 'html', this.detail.activityDesc, this.$wx, 20)

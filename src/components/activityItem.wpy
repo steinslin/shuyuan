@@ -5,7 +5,7 @@
       <div class="title">{{obj.activityTitle}}</div>
       <div class="desc">{{obj.introduce}}</div>
       <div class="time"><image mode="widthFix" class="icon" src="../static/images/time.png"/>{{obj.startTime}}</div>
-      <div class="btn disabled" v-if="nowTime >= obj.endTime">活动已结束</div>
+      <div class="btn disabled" v-if="obj.activityState == -1">活动已结束</div>
       <div class="btn disabled" v-else-if="nowTime > obj.deadline">报名已结束</div>
       <div class="btn disabled" v-else-if="nowTime < obj.activityBeginTime">报名未开始</div>
       <div class="btn disabled" v-else-if="obj.participateNumber >= obj.participateNumberTotal">报名已满</div>

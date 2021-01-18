@@ -42,7 +42,7 @@
      sign:false,
    },
    async onLoad (param) {
-      this.param = param
+      this.param = param || this.param
       let signInfo = await this.$apis.activitySignSel({
         activityId: this.param.activityId
       })
@@ -83,7 +83,11 @@
       //    url:"/pages/my/index"
       //  })
      }
-   }
+   },
+   async onPullDownRefresh () {
+     this.$wx.onLoad()
+     wx.stopPullDownRefresh()
+   },
   });
 </script>
 <style lang="less" scoped>
@@ -172,6 +176,7 @@ module.exports.getTime = getTime;
 </wxs>
 <config>
 {
+    enablePullDownRefresh: true,
     "navigationBarTitleText":"签到信息",
     "usingComponents": {
       

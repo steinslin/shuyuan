@@ -1,10 +1,11 @@
 <template>
   <div class="page">
     <image class="show" mode="widthFix" src="../../static/images/question.png"/>
+    <block v-if="question.length > 0">
     <div class="panel" v-for="(item, idex) in question" :key="idex">
       <block v-if="item.type == 'radio'">
         <div class="head">
-          <span class="title">{{idex+1+'.'+item.key}}</span>
+          <span class="title">{{item.key}}</span>
           <!-- <span class="status fr">{{item.type=="radio"}}</span> -->
         </div>
         <div class="content">
@@ -16,17 +17,33 @@
           </div>
         </div>
       </block>
+      <block v-if="item.type == 'check'">
+        <div class="head">
+          <span class="title">{{item.key}}</span>
+          <!-- <span class="status fr">{{item.type=="radio"}}</span> -->
+        </div>
+        <div class="content">
+          <div class="check-wrap" @click.stop="check(item, idex, idx)" v-for="(itm, idx) in item.list" :key="idx">
+            <div class="item">
+              <div class="circle" :class="{on:itm.checked}"></div>
+              <div class="text">{{itm.text}}</div>
+            </div>
+          </div>
+        </div>
+      </block>
       <block v-if="item.type == 'textarea'">
         <div class="head">
-          <span class="title">{{idex+1+'.'+item.key}}</span>
+          <span class="title">{{item.key}}</span>
           <!-- <span class="status fr">单选</span> -->
         </div>
         <div class="content">
-          <textarea class="advice" v-model="item.value" placeholder="请写下你想对万科梅沙书院说的建议"/>
+          <textarea class="advice" v-model="item.value"/>
         </div>
       </block>
     </div>
     <div class="submit" @click="submit">提交问卷</div>
+    </block>
+    <block v-else>后台暂未设定问卷调查!</block>
   </div>
 </template>
 <script>
@@ -34,35 +51,7 @@
   wepy.page({
    data:{
      param:{},
-     question:[{
-       id:1,
-       type:"radio",
-       key:"你对本次活动的满意程度？",
-       list:["十分满意","满意","一般","不满意"],
-       index:0,
-       value:"十分满意",
-       show:true
-     },{
-       id:2,
-       type:"radio",
-       key:"本次活动你最喜欢哪个环节？",
-       list:["讲座","校园参观","体验课","午餐体验","节目表演"],
-       index:0,
-       value:"讲座",
-       show:true
-     },{
-       id:3,
-       type:"textarea",
-       key:"你对本次活动建议（如有）？",
-       value:"",
-       show:true
-     },{
-       id:4,
-       type:"textarea",
-       key:"你理想的高中是哪所学校呢？（原因）",
-       value:"",
-       show:true
-     }]
+     question:[]
    },
    methods:{
      radioCheck (item, index, idx) {
@@ -72,6 +61,16 @@
       this.$set(this.question[index],'value',this.question[index].list[idx])
       // this.question[index].index = idx
       // this.question[index].value = this.question[index].list[idx]
+     },
+     check (item, index, idx) {
+       console.log(this.question[index]['list'][idx]['checked'])
+       this.$set(this.question[index]['list'][idx],'checked',!this.question[index]['list'][idx]['checked'])
+       let arr = this.question[index]['list'].filter((itm) => {
+         return itm.checked == true
+       }).map((itm) => {
+         return itm.text
+       })
+       this.$set(this.question[index],'value',arr.join(","))
      },
      async submit () {
        let feedBackAdd = await this.$apis.feedBackAdd({
@@ -88,8 +87,10 @@
        }
      }
    },
-   onLoad (param) {
-     this.param = param
+   async onLoad (param) {
+     this.param = param || this.param
+     let detail = await this.$apis.activityInfoSel(this.param.activityId)
+     this.question = JSON.parse(detail.activityInfo.feedBackJson)
    },
    async onPullDownRefresh () {
      this.$wx.onLoad()

@@ -101,7 +101,8 @@
         <div class="btn" @click="source.show = false">确定</div>
       </div>
     </van-popup>
-    <div class="submit" v-if="detail.isPast==-1" @click="pay">确认预约</div>
+    <div class="submit" v-if="detail.isPast==-1 && detail.activityState == 0" @click="pay">确认预约</div>
+    <div class="submit disabled" v-if="detail.isPast==-1 && detail.activityState !== 0">确认预约</div>
     <shop-bar :price="detail.activityPrice * form.number" @pay="pay" v-if="detail.isPast==1"/>
   </div>
 </template>
@@ -337,16 +338,22 @@
      }
    },
    async onLoad (param) {
+<<<<<<< HEAD
      console.log(param)
     //  await this.$apis.getOpenId()
      try{
      this.param = param
+=======
+     this.param = param || this.param
+     console.log(this.param)
+>>>>>>> 5c97413e9a9602f58d3cca0fd54ed182ebe5c697
      let detail = await this.$apis.activityInfoSel(param.activityId)
      let userInfo = await this.$apis.userInfo({})
      this.detail = detail.activityInfo
      this.form.contactsTel = userInfo.vipInfo.phonenumber
      this.form.contacts = userInfo.vipInfo.userNike
      this.formList = JSON.parse(this.detail.activityFormJson)
+<<<<<<< HEAD
      }catch(err){
        wx.showToast({
           title: '请求错误,请下拉刷新',
@@ -358,6 +365,8 @@
   async onPullDownRefresh () {
      this.$wx.onLoad(this.param)
      wx.stopPullDownRefresh()
+=======
+>>>>>>> 5c97413e9a9602f58d3cca0fd54ed182ebe5c697
    },
    onShareAppMessage (ops) {
     if (ops.from === 'button') {
@@ -471,6 +480,9 @@
   color:#fff;
   background: #3B8DB5;
   border-radius: 49rpx;
+  &.disabled{
+    background: #999 !important;
+  }
 }
 .placeholder{
   color:#9a9a9a;
